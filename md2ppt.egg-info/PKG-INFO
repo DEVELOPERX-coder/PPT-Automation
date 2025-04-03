@@ -1,3 +1,29 @@
+Metadata-Version: 2.4
+Name: md2ppt
+Version: 0.1.0
+Summary: Convert Markdown to PowerPoint presentations
+Home-page: https://github.com/yourusername/md2ppt
+Author: Your Name
+Author-email: your.email@example.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+Requires-Dist: python-pptx>=0.6.18
+Requires-Dist: mistune>=2.0.0
+Requires-Dist: docopt>=0.6.2
+Requires-Dist: requests>=2.25.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
+
 # md2ppt: Markdown to PowerPoint Converter
 
 A powerful Python package that converts Markdown files into feature-rich Microsoft PowerPoint presentations.
@@ -261,21 +287,21 @@ Check the `examples/` directory for example Markdown files and themes.
 
 ```
 md2ppt/
-│
-├── md2ppt/
-│   ├── __init__.py
-│   ├── main.py          # Command-line entry point
-│   ├── parser.py        # Markdown parsing logic
-│   ├── ppt_generator.py # PowerPoint generation
-│   ├── styler.py        # Presentation styling
-│   ├── utils.py         # Utility functions
-│   └── advanced_features.py # Advanced PowerPoint features
-│
-├── tests/               # Unit tests
-├── examples/            # Example files
-├── README.md            # Project documentation
-├── requirements.txt     # Dependencies
-└── setup.py             # Installation script
+â”‚
+â”œâ”€â”€ md2ppt/
+â”‚   â”œâ”€â”€ __init__.py
+â”‚   â”œâ”€â”€ main.py          # Command-line entry point
+â”‚   â”œâ”€â”€ parser.py        # Markdown parsing logic
+â”‚   â”œâ”€â”€ ppt_generator.py # PowerPoint generation
+â”‚   â”œâ”€â”€ styler.py        # Presentation styling
+â”‚   â”œâ”€â”€ utils.py         # Utility functions
+â”‚   â””â”€â”€ advanced_features.py # Advanced PowerPoint features
+â”‚
+â”œâ”€â”€ tests/               # Unit tests
+â”œâ”€â”€ examples/            # Example files
+â”œâ”€â”€ README.md            # Project documentation
+â”œâ”€â”€ requirements.txt     # Dependencies
+â””â”€â”€ setup.py             # Installation script
 ```
 
 ### Running Tests
