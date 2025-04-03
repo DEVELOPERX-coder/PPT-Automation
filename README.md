@@ -1,5 +1,3 @@
-# PPT-Automation
-
 # Markdown to PowerPoint Converter
 
 This tool converts specially formatted Markdown files into feature-rich PowerPoint presentations. It supports a wide range of PowerPoint features including precise element positioning, formatting, animations, and more.
@@ -729,10 +727,149 @@ Colors can be specified in multiple formats:
 ## Known Limitations
 
 - Some advanced PowerPoint features may require post-processing
-- Animation effects are limited to basic types
+- **Animations are not directly supported by the python-pptx library**
 - Chart customization options are more limited than native PowerPoint
 - Complex SmartArt is not fully supported
 - Embedded video support is limited
+
+## Animation Handling
+
+This system provides full PowerPoint animation support through Windows COM automation. Animations are specified in the Markdown but applied in a separate step using the win32com library.
+
+### How Animation Works
+
+1. Create your Markdown file with animation properties as described in the Animation Properties section
+2. Generate the base PowerPoint file: `python md2pptx.py your_file.md`
+3. Apply animations with the `-a` flag: `python md2pptx.py your_file.md -a --apply-animations`
+
+### Requirements for Animation
+
+- Windows operating system
+- Microsoft PowerPoint installed
+- Python `pywin32` library: `pip install pywin32`
+
+### Animation Properties
+
+The system supports a wide range of PowerPoint animations that can be applied to any element:
+
+| Property              | Description                      | Example Values                                     |
+| --------------------- | -------------------------------- | -------------------------------------------------- |
+| `animation`           | The animation effect name        | "fade", "fly_in", "wipe", "zoom", "bounce", "spin" |
+| `animation_type`      | Type of animation                | "entrance", "emphasis", "exit"                     |
+| `animation_trigger`   | When animation starts            | "on_click", "with_previous", "after_previous"      |
+| `animation_direction` | Direction of animation           | "in", "out", "up", "down", "left", "right"         |
+| `animation_delay`     | Delay before animation (seconds) | 0, 0.5, 1                                          |
+| `animation_duration`  | Animation duration (seconds)     | 0.5, 1, 2                                          |
+
+**Example:**
+
+```markdown
+:::text
+{
+x: 1in,
+y: 1in,
+width: 4in,
+animation: "fade",
+animation_type: "entrance",
+animation_trigger: "on_click",
+animation_delay: 0.5,
+animation_duration: 1.0
+}
+This text will fade in when clicked.
+:::
+```
+
+### Available Animation Effects
+
+#### Entrance Animations
+
+- `appear` - Element simply appears
+- `fade` - Element fades in
+- `fly_in` - Element flies in from edge
+- `float` - Element floats into position
+- `split` - Element splits open
+- `wipe` - Element wipes into view
+- `zoom` - Element zooms in
+- `random` - Random animation
+- `wheel` - Wheel animation
+- `swivel` - Swivel animation
+- `bounce` - Element bounces in
+- `grow` - Element grows from small to full size
+- `shape` - Shape-based entrance
+- `blinds` - Blinds effect
+- `box` - Box entrance
+- `checkerboard` - Checkerboard pattern
+- `circle` - Circle shape
+- `dissolve` - Dissolve into view
+- `peek` - Element peeks into view
+- `plus` - Plus shape entrance
+- `spiral` - Spiral animation
+- `stretch` - Element stretches into view
+- `strips` - Strips effect
+- `wedge` - Wedge shape
+- `wheel` - Wheel animation
+- `curve_up` - Element curves upward
+- `curve_down` - Element curves downward
+- `drape` - Drape effect
+- `curtains` - Curtain effect
+- `flash` - Flash animation
+- `lines` - Line effect
+
+#### Emphasis Animations
+
+- `pulse` - Element pulses
+- `color` - Color change
+- `brush` - Brush effect
+- `teeter` - Element teeters
+- `wave` - Wave effect
+- `spin` - Element spins
+- `grow_with_color` - Grow with color change
+- `desaturate` - Desaturate color
+- `darken` - Darken element
+- `lighten` - Lighten element
+- `transparency` - Change transparency
+- `object_color` - Change object color
+- `complementary_color` - Change to complementary color
+- `change_line_color` - Change line color
+- `change_fill_color` - Change fill color
+
+#### Exit Animations
+
+- `fade_out` - Element fades out
+- `fly_out` - Element flies out
+- `float_out` - Element floats away
+- `split_out` - Element splits
+- `wipe_out` - Element wipes out
+- `zoom_out` - Element zooms out
+
+### Slide Transitions
+
+Slide transitions are specified in the slide settings block:
+
+```markdown
+# Example Slide
+
+{
+transition: "fade",
+transition_speed: "medium",
+transition_duration: 1.0,
+advance_time: 5.0
+}
+```
+
+Available transitions include:
+
+- `fade` - Fade transition
+- `push` - Push transition
+- `wipe` - Wipe transition
+- `split` - Split transition
+- `reveal` - Reveal transition
+- `random` - Random transition
+- `zoom` - Zoom transition
+- `cube` - 3D cube
+- `doors` - Opening doors
+- `flip` - Page flip
+- And many more (see full documentation)
 
 ## Advanced Features
 

@@ -18,7 +18,6 @@ from pptx.enum.shapes import MSO_SHAPE
 from pptx.dml.color import RGBColor
 from pptx.enum.dml import MSO_THEME_COLOR
 from pptx.enum.action import PP_ACTION
-from pptx.enum.animation import PP_ANIMATION_TYPE, PP_ANIMATION_EFFECT
 
 class MarkdownParser:
     """Parse the markdown file and extract PowerPoint elements."""
@@ -29,6 +28,8 @@ class MarkdownParser:
         self.content = self._read_file()
         self.slides = []
         self.global_settings = {}
+        self.animations = []
+        self.transitions = []
     
     def _read_file(self):
         """Read the markdown file content."""
@@ -57,14 +58,22 @@ class MarkdownParser:
             slide_blocks[0] = '# ' + slide_blocks[0]
         
         # Process each slide block
-        for block in slide_blocks:
+        for i, block in enumerate(slide_blocks):
             if block.strip():
-                slide_data = self._parse_slide(block)
+                slide_data = self._parse_slide(block, i+1)  # Pass slide index
                 self.slides.append(slide_data)
+                
+                # Extract transitions from slide settings
+                slide_settings = slide_data.get('settings', {})
+                if any(key.startswith('transition') for key in slide_settings.keys()):
+                    self.transitions.append({
+                        'slide_index': i+1,
+                        'props': {k: v for k, v in slide_settings.items() if k.startswith('transition')}
+                    })
         
-        return self.slides, self.global_settings
+        return self.slides, self.global_settings, self.animations, self.transitions
     
-    def _parse_slide(self, block):
+    def _parse_slide(self, block, slide_index):
         """Parse a single slide block."""
         lines = block.split('\n')
         slide_title = lines[0].lstrip('#').strip()
@@ -91,6 +100,7 @@ class MarkdownParser:
         # Extract content elements
         elements = []
         current_element = None
+        element_index = 0  # Track element indices for animation references
         
         i = content_start
         while i < len(lines):
@@ -100,6 +110,19 @@ class MarkdownParser:
             if line.startswith(':::'):
                 # Save previous element if exists
                 if current_element:
+                    element_index += 1
+                    
+                    # Check for animation properties
+                    animation_props = {k: v for k, v in current_element['properties'].items() 
+                                      if k.startswith('animation')}
+                    
+                    if animation_props:
+                        self.animations.append({
+                            'slide_index': slide_index,
+                            'element_index': element_index,
+                            'props': animation_props
+                        })
+                    
                     elements.append(current_element)
                 
                 # Start new element
@@ -143,6 +166,19 @@ class MarkdownParser:
         
         # Add the last element if exists
         if current_element:
+            element_index += 1
+            
+            # Check for animation properties
+            animation_props = {k: v for k, v in current_element['properties'].items() 
+                              if k.startswith('animation')}
+            
+            if animation_props:
+                self.animations.append({
+                    'slide_index': slide_index,
+                    'element_index': element_index,
+                    'props': animation_props
+                })
+            
             elements.append(current_element)
         
         return {
@@ -310,8 +346,14 @@ class PowerPointGenerator:
             except ValueError:
                 print(f"Warning: Invalid rotation value: {properties['rotation']}")
         
-        # Animation (limited support in python-pptx)
-        # This would require COM automation or more advanced libraries
+        # Animation (not supported directly in python-pptx)
+        # Animation properties are parsed but not applied
+        # They can be used for documentation purposes or for post-processing
+        if 'animation' in properties:
+            # Store animation properties in a custom property for potential future use
+            # or for documentation purposes when manually adding animations
+            print(f"Note: Animation specified for element: {properties['animation']} (will need manual implementation)")
+            # We could also add a text note or comment about the animation
         
         return shape
     
@@ -611,6 +653,8 @@ def main():
     parser.add_argument('-o', '--output', help='Output PowerPoint file')
     parser.add_argument('-g', '--generate-readme', action='store_true', 
                         help='Generate README.md with syntax documentation')
+    parser.add_argument('-a', '--apply-animations', action='store_true',
+                        help='Apply animations using PowerPoint COM automation (Windows only)')
     
     args = parser.parse_args()
     
@@ -627,12 +671,26 @@ def main():
     
     # Parse markdown
     parser = MarkdownParser(args.input_file)
-    slides_data, global_settings = parser.parse()
+    slides_data, global_settings, animations, transitions = parser.parse()
     
     # Generate PowerPoint
     generator = PowerPointGenerator(slides_data, global_settings)
     generator.generate()
     generator.save(output_file)
+    
+    # Apply animations if requested
+    if args.apply_animations and animations:
+        try:
+            # Import here to avoid dependency issues on non-Windows platforms
+            from pptx_animation_handler import apply_animations_to_presentation
+            print(f"Applying {len(animations)} animations and {len(transitions)} transitions...")
+            apply_animations_to_presentation(output_file, animations, transitions)
+            print("Animations applied successfully.")
+        except ImportError:
+            print("Warning: Could not import animation handler. Animations not applied.")
+            print("To enable animations, install pywin32: pip install pywin32")
+        except Exception as e:
+            print(f"Error applying animations: {str(e)}")
     
     # Generate README if requested
     if args.generate_readme:
