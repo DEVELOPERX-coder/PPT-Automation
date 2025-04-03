@@ -17,6 +17,12 @@ Install the dependencies with:
 pip install python-pptx pyyaml
 ```
 
+For advanced features (animations, transitions, etc.):
+
+```bash
+pip install pywin32
+```
+
 ## Basic Usage
 
 ```bash
@@ -26,6 +32,7 @@ python md2pptx.py input.md -o output.pptx
 Options:
 
 - `-o, --output`: Specify the output PowerPoint file name
+- `-b, --backend`: Choose backend (`win32com` or `python-pptx`, default: `win32com`)
 - `-g, --generate-readme`: Generate a README file with syntax documentation
 
 ## Markdown Syntax Reference
@@ -253,6 +260,65 @@ Available chart types:
 - doughnut
 - radar
 
+### SmartArt
+
+SmartArt elements create diagrams from lists of text items.
+
+```markdown
+:::smartart
+{
+x: 1in,
+y: 1in,
+width: 8in,
+height: 3in,
+type: "process"
+}
+Step 1, Step 2, Step 3, Step 4
+:::
+```
+
+Available SmartArt types:
+
+- process
+- cycle
+- hierarchy
+- pyramid
+- radial
+- venn
+- matrix
+- relationship
+- list
+
+## Animation & Transition Effects
+
+You can add animations to any element by adding animation properties:
+
+```markdown
+:::text
+{
+x: 1in,
+y: 1in,
+width: 4in,
+animation: "fade",
+animation_trigger: "on_click",
+animation_delay: 0.5,
+animation_duration: 1.0
+}
+This text will fade in when clicked.
+:::
+```
+
+Slide transitions are specified in the slide settings:
+
+```markdown
+# Example Slide
+
+{
+transition: "fade",
+transition_speed: "medium"
+}
+```
+
 ## Property Reference
 
 ### Global Settings Properties
@@ -267,6 +333,7 @@ Available chart types:
 | `company_logo`       | Path to company logo for templates | "/path/to/logo.png"                 |
 | `footer_text`        | Default footer text for all slides | "Confidential"                      |
 | `header_text`        | Default header text for all slides | "Company Name"                      |
+| `template`           | PowerPoint template to use         | "template.potx"                     |
 
 ### Slide Properties
 
@@ -282,9 +349,19 @@ Available chart types:
 | `slide_number`     | Show/hide slide number         | true, false                                 |
 | `notes`            | Speaker notes for the slide    | "Remember to mention key points"            |
 
-### Element Properties
+### Animation Properties
 
-#### Position and Size
+| Property              | Description                      | Example Values                                     |
+| --------------------- | -------------------------------- | -------------------------------------------------- |
+| `animation`           | Animation type                   | "fade", "wipe", "fly_in", "float", "split", "zoom" |
+| `animation_trigger`   | When animation starts            | "on_click", "with_previous", "after_previous"      |
+| `animation_direction` | Direction of animation           | "in", "out", "up", "down", "left", "right"         |
+| `animation_delay`     | Delay before animation (seconds) | 0, 0.5, 1                                          |
+| `animation_duration`  | Animation duration (seconds)     | 0.5, 1, 2                                          |
+
+## Element Properties
+
+### Position and Size Properties
 
 | Property   | Description         | Example Values            |
 | ---------- | ------------------- | ------------------------- |
@@ -294,368 +371,7 @@ Available chart types:
 | `height`   | Element height      | "3in", "7.62cm", "216pt"  |
 | `rotation` | Rotation angle      | 45, 90, -30               |
 
-#### Text Formatting
-
-| Property         | Description        | Example Values                        |
-| ---------------- | ------------------ | ------------------------------------- |
-| `font`           | Font family name   | "Arial", "Calibri", "Times New Roman" |
-| `font_size`      | Font size          | 24, "24pt"                            |
-| `font_color`     | Text color         | "#FF0000", "rgb(255,0,0)", "red"      |
-| `bold`           | Bold text          | true, false                           |
-| `italic`         | Italic text        | true, false                           |
-| `underline`      | Underlined text    | true, false                           |
-| `strikethrough`  | Strikethrough text | true, false                           |
-| `align`          | Text alignment     | "left", "center", "right", "justify"  |
-| `vertical_align` | Vertical alignment | "top", "middle", "bottom"             |
-| `line_spacing`   | Line spacing       | 1, 1.5, 2                             |
-| `margin_left`    | Left text margin   | "0.1in", "0.25cm"                     |
-| `margin_right`   | Right text margin  | "0.1in", "0.25cm"                     |
-| `margin_top`     | Top text margin    | "0.1in", "0.25cm"                     |
-| `margin_bottom`  | Bottom text margin | "0.1in", "0.25cm"                     |
-| `bullet`         | Enable bullets     | true, false                           |
-| `bullet_style`   | Bullet style       | "circle", "square", "number", "arrow" |
-| `bullet_size`    | Bullet size        | 80, 100, 120                          |
-| `bullet_color`   | Bullet color       | "#FF0000", "rgb(255,0,0)", "red"      |
-
-#### Shape Properties
-
-| Property           | Description        | Example Values                                   |
-| ------------------ | ------------------ | ------------------------------------------------ |
-| `shape_type`       | Shape type         | "rectangle", "oval", "triangle", "diamond", etc. |
-| `fill`             | Fill color         | "#0000FF", "rgb(0,0,255)", "blue"                |
-| `fill_style`       | Fill style         | "solid", "gradient", "pattern"                   |
-| `border_color`     | Border/line color  | "#000000", "rgb(0,0,0)", "black"                 |
-| `border_width`     | Border/line width  | "2pt", "1px", "0.03in"                           |
-| `border_style`     | Border/line style  | "solid", "dashed", "dotted"                      |
-| `transparency`     | Fill transparency  | 0.0, 0.5, 1.0                                    |
-| `shadow`           | Enable shadow      | true, false                                      |
-| `shadow_color`     | Shadow color       | "#888888", "rgb(136,136,136)", "gray"            |
-| `shadow_blur`      | Shadow blur radius | 5, 10, 15                                        |
-| `shadow_direction` | Shadow direction   | 0, 45, 90, 135, 180, 225, 270, 315               |
-| `shadow_distance`  | Shadow distance    | 3, 5, 10                                         |
-| `glow`             | Enable glow effect | true, false                                      |
-| `glow_color`       | Glow color         | "#FF00FF", "rgb(255,0,255)", "magenta"           |
-| `glow_size`        | Glow size          | 5, 10, 15                                        |
-
-#### Image Properties
-
-| Property       | Description        | Example Values    |
-| -------------- | ------------------ | ----------------- |
-| `brightness`   | Image brightness   | -0.5, 0, 0.5      |
-| `contrast`     | Image contrast     | -0.5, 0, 0.5      |
-| `crop_left`    | Left crop          | "0.5in", "1.27cm" |
-| `crop_right`   | Right crop         | "0.5in", "1.27cm" |
-| `crop_top`     | Top crop           | "0.5in", "1.27cm" |
-| `crop_bottom`  | Bottom crop        | "0.5in", "1.27cm" |
-| `transparency` | Image transparency | 0.0, 0.5, 1.0     |
-
-#### Table Properties
-
-| Property         | Description                    | Example Values                       |
-| ---------------- | ------------------------------ | ------------------------------------ |
-| `header_row`     | Style first row as header      | true, false                          |
-| `first_column`   | Style first column differently | true, false                          |
-| `banded_rows`    | Alternate row styling          | true, false                          |
-| `banded_columns` | Alternate column styling       | true, false                          |
-| `border_color`   | Table border color             | "#333333", "rgb(51,51,51)", "black"  |
-| `border_width`   | Table border width             | "1pt", "2px", "0.03in"               |
-| `cell_padding`   | Padding inside cells           | "0.05in", "0.127cm"                  |
-| `table_style`    | Named table style              | "Light", "Medium", "Dark", "Accent1" |
-
-#### Chart Properties
-
-| Property          | Description        | Example Values                                    |
-| ----------------- | ------------------ | ------------------------------------------------- |
-| `chart_type`      | Type of chart      | "bar", "column", "line", "pie", "area", "scatter" |
-| `title`           | Chart title        | "Sales Data"                                      |
-| `has_legend`      | Show/hide legend   | true, false                                       |
-| `legend_position` | Position of legend | "right", "left", "top", "bottom"                  |
-| `x_axis_title`    | X-axis title       | "Categories"                                      |
-| `y_axis_title`    | Y-axis title       | "Values"                                          |
-| `data_labels`     | Show data labels   | true, false                                       |
-| `data_table`      | Show data table    | true, false                                       |
-| `gridlines`       | Show gridlines     | true, false                                       |
-
-#### Animation Properties
-
-| Property              | Description                      | Example Values                                     |
-| --------------------- | -------------------------------- | -------------------------------------------------- |
-| `animation`           | Animation type                   | "fade", "wipe", "fly_in", "float", "split", "zoom" |
-| `animation_trigger`   | When animation starts            | "on_click", "with_previous", "after_previous"      |
-| `animation_direction` | Direction of animation           | "in", "out", "up", "down", "left", "right"         |
-| `animation_delay`     | Delay before animation (seconds) | 0, 0.5, 1                                          |
-| `animation_duration`  | Animation duration (seconds)     | 0.5, 1, 2                                          |
-| `animation_emphasis`  | Emphasis effect                  | "pulse", "color", "grow/shrink", "spin", "teeter"  |
-
-#### Hyperlink Properties
-
-| Property    | Description             | Example Values                                             |
-| ----------- | ----------------------- | ---------------------------------------------------------- |
-| `hyperlink` | Link destination        | "https://example.com", "slide3", "mailto:user@example.com" |
-| `tooltip`   | Text displayed on hover | "Click for more information"                               |
-| `action`    | Action when clicked     | "hyperlink", "next_slide", "previous_slide", "run_macro"   |
-
-## Example Markdown File
-
-Here's a complete example of a presentation with multiple slides:
-
-```markdown
----
-slide_width: 10in
-slide_height: 7.5in
-default_font: "Calibri"
-default_font_size: 18
-company_logo: "company_logo.png"
-footer_text: "Company Confidential - 2025"
----
-
-# Quarterly Report
-
-{
-layout: "Title Slide",
-background: "#003366"
-}
-
-:::text[x:1in, y:2.5in, width:8in, height:1.5in]
-{font: "Calibri", font_size: 44, font_color: "#FFFFFF", align: center, bold: true}
-Q1 2025 Financial Results
-:::
-
-:::text[x:1in, y:4in, width:8in, height:1in]
-{font: "Calibri", font_size: 28, font_color: "#FFFFFF", align: center}
-Presented by: John Smith, CFO
-:::
-
-:::image[x:8in, y:0.5in, width:1.5in, height:0.75in]
-company_logo.png
-:::
-
-# Executive Summary
-
-{
-layout: "Title and Content",
-background: "#FFFFFF",
-transition: "fade"
-}
-
-:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
-{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
-Q1 2025 Highlights
-:::
-
-:::text[x:0.5in, y:1.75in, width:9in, height:4in]
-{font: "Calibri", font_size: 24, bullet: true}
-
-- Record quarterly revenue of $125.7M (↑18% YoY)
-- Operating margin increased to 28.3% (↑2.1 points YoY)
-- Expanded customer base by 15% in North America
-- Successfully launched 3 new product lines
-- Completed acquisition of XYZ Technologies
-  :::
-
-:::image[x:8in, y:5.5in, width:1.5in, height:0.75in]
-company_logo.png
-:::
-
-# Financial Results
-
-{
-layout: "Title and Content",
-background: "#FFFFFF",
-transition: "push"
-}
-
-:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
-{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
-Financial Performance
-:::
-
-:::chart[x:0.5in, y:1.75in, width:4.5in, height:3in]
-{
-chart_type: "column",
-title: "Quarterly Revenue",
-has_legend: true,
-legend_position: "bottom",
-x_axis_title: "Quarter",
-y_axis_title: "Revenue ($ millions)"
-}
-Q1 2024, 106.5
-Q2 2024, 110.3
-Q3 2024, 118.2
-Q4 2024, 122.1
-Q1 2025, 125.7
-:::
-
-:::chart[x:5.25in, y:1.75in, width:4.25in, height:3in]
-{
-chart_type: "line",
-title: "Operating Margin (%)",
-has_legend: false,
-x_axis_title: "Quarter",
-y_axis_title: "Margin (%)",
-data_labels: true
-}
-Q1 2024, 26.2
-Q2 2024, 26.8
-Q3 2024, 27.1
-Q4 2024, 27.5
-Q1 2025, 28.3
-:::
-
-:::table[x:0.5in, y:5in, width:9in, height:1.5in]
-{
-header_row: true,
-first_column: true,
-banded_rows: true
-}
-| Metric | Q1 2024 | Q2 2024 | Q3 2024 | Q4 2024 | Q1 2025 | YoY Change |
-| Revenue | $106.5M | $110.3M | $118.2M | $122.1M | $125.7M | +18.0% |
-| Gross Margin | 68.5% | 69.2% | 69.8% | 70.3% | 71.2% | +2.7pts |
-| Op. Margin | 26.2% | 26.8% | 27.1% | 27.5% | 28.3% | +2.1pts |
-| Net Income | $22.4M | $23.7M | $25.6M | $26.8M | $28.5M | +27.2% |
-:::
-
-# Product Roadmap
-
-{
-background: "#FFFFFF",
-transition: "fade"
-}
-
-:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
-{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
-Product Timeline
-:::
-
-:::shape[x:0.5in, y:2in, width:1.5in, height:1.5in]
-{
-shape_type: "oval",
-fill: "#4472C4",
-border_color: "#2F528F",
-border_width: 2pt,
-font_color: "#FFFFFF",
-align: "center",
-vertical_align: "middle",
-font_size: 20,
-bold: true
-}
-Q2 2025
-:::
-
-:::shape[x:2.75in, y:2in, width:1.5in, height:1.5in]
-{
-shape_type: "oval",
-fill: "#70AD47",
-border_color: "#507E32",
-border_width: 2pt,
-font_color: "#FFFFFF",
-align: "center",
-vertical_align: "middle",
-font_size: 20,
-bold: true
-}
-Q3 2025
-:::
-
-:::shape[x:5in, y:2in, width:1.5in, height:1.5in]
-{
-shape_type: "oval",
-fill: "#ED7D31",
-border_color: "#AE5A21",
-border_width: 2pt,
-font_color: "#FFFFFF",
-align: "center",
-vertical_align: "middle",
-font_size: 20,
-bold: true
-}
-Q4 2025
-:::
-
-:::shape[x:7.25in, y:2in, width:1.5in, height:1.5in]
-{
-shape_type: "oval",
-fill: "#5B9BD5",
-border_color: "#41719C",
-border_width: 2pt,
-font_color: "#FFFFFF",
-align: "center",
-vertical_align: "middle",
-font_size: 20,
-bold: true
-}
-Q1 2026
-:::
-
-:::text[x:0.25in, y:3.75in, width:2in, height:2in]
-{font_size: 16, align: "center"}
-
-- Platform 2.0 Release
-- Mobile Integration
-- API Expansion
-  :::
-
-:::text[x:2.5in, y:3.75in, width:2in, height:2in]
-{font_size: 16, align: "center"}
-
-- Cloud Migration
-- Enhanced Analytics
-- Partner Portal
-  :::
-
-:::text[x:4.75in, y:3.75in, width:2in, height:2in]
-{font_size: 16, align: "center"}
-
-- AI Features
-- Global Expansion
-- Enterprise Edition
-  :::
-
-:::text[x:7in, y:3.75in, width:2in, height:2in]
-{font_size: 16, align: "center"}
-
-- Next-Gen Platform
-- Blockchain Integration
-- IoT Compatibility
-  :::
-
-# Thank You
-
-{
-layout: "Title Slide",
-background: "#003366",
-transition: "fade"
-}
-
-:::text[x:1in, y:2.5in, width:8in, height:1.5in]
-{font: "Calibri", font_size: 48, font_color: "#FFFFFF", align: center, bold: true}
-Thank You!
-:::
-
-:::text[x:1in, y:4in, width:8in, height:1in]
-{font: "Calibri", font_size: 24, font_color: "#FFFFFF", align: center}
-Questions & Answers
-:::
-
-:::shape[x:3.5in, y:5.5in, width:3in, height:0.75in]
-{
-shape_type: "rounded_rectangle",
-fill: "#4472C4",
-border_color: "#2F528F",
-border_width: 2pt,
-font_color: "#FFFFFF",
-align: "center",
-vertical_align: "middle",
-font_size: 20,
-bold: true,
-hyperlink: "mailto:john.smith@company.com",
-tooltip: "Send email with questions"
-}
-Contact: john.smith@company.com
-:::
-```
-
-## Working with Units
+### Working with Units
 
 The system supports various units for position and size specifications:
 
@@ -664,12 +380,11 @@ The system supports various units for position and size specifications:
 - `pt`: Points (1/72 of an inch)
 - `px`: Pixels (approximate conversion)
 
-## Working with Colors
+### Working with Colors
 
 Colors can be specified in multiple formats:
 
 - Hex: `#FF0000`, `#F00`
-- RGB: `rgb(255,0,0)`
 - Named colors: `red`, `blue`, `green`, etc.
 
 ## Tips and Best Practices
@@ -677,8 +392,8 @@ Colors can be specified in multiple formats:
 1. **Organizing Content**:
 
    - Use global settings for consistent presentation styles
-   - Group related slides with level 2 headings
-   - Use comments to mark sections: `<!-- Section: Financial Results -->`
+   - Group related slides with meaningful titles
+   - Use bullet points for lists and organized content
 
 2. **Layout and Positioning**:
 
@@ -689,7 +404,7 @@ Colors can be specified in multiple formats:
 3. **Styling**:
 
    - Maintain consistent fonts and colors throughout
-   - Use the company style guide for visual elements
+   - Use company style guides for visual elements
    - Limit animations to avoid distractions
 
 4. **Performance**:
@@ -714,234 +429,19 @@ Colors can be specified in multiple formats:
    - Ensure values are in expected formats
 
 3. **Images not displaying**:
-
    - Verify file paths are correct
    - Check that image files exist and are readable
    - Try using absolute paths if relative paths fail
 
-4. **Table layout issues**:
-   - Check row/column consistency
-   - Adjust table dimensions if content is cut off
-   - Use consistent delimiters (commas or pipe characters)
-
-## Known Limitations
-
-- Some advanced PowerPoint features may require post-processing
-- **Animations are not directly supported by the python-pptx library**
-- Chart customization options are more limited than native PowerPoint
-- Complex SmartArt is not fully supported
-- Embedded video support is limited
-
-## Animation Handling
-
-This system provides full PowerPoint animation support through Windows COM automation. Animations are specified in the Markdown but applied in a separate step using the win32com library.
-
-### How Animation Works
-
-1. Create your Markdown file with animation properties as described in the Animation Properties section
-2. Generate the base PowerPoint file: `python md2pptx.py your_file.md`
-3. Apply animations with the `-a` flag: `python md2pptx.py your_file.md -a --apply-animations`
-
-### Requirements for Animation
-
-- Windows operating system
-- Microsoft PowerPoint installed
-- Python `pywin32` library: `pip install pywin32`
-
-### Animation Properties
-
-The system supports a wide range of PowerPoint animations that can be applied to any element:
-
-| Property              | Description                      | Example Values                                     |
-| --------------------- | -------------------------------- | -------------------------------------------------- |
-| `animation`           | The animation effect name        | "fade", "fly_in", "wipe", "zoom", "bounce", "spin" |
-| `animation_type`      | Type of animation                | "entrance", "emphasis", "exit"                     |
-| `animation_trigger`   | When animation starts            | "on_click", "with_previous", "after_previous"      |
-| `animation_direction` | Direction of animation           | "in", "out", "up", "down", "left", "right"         |
-| `animation_delay`     | Delay before animation (seconds) | 0, 0.5, 1                                          |
-| `animation_duration`  | Animation duration (seconds)     | 0.5, 1, 2                                          |
-
-**Example:**
-
-```markdown
-:::text
-{
-x: 1in,
-y: 1in,
-width: 4in,
-animation: "fade",
-animation_type: "entrance",
-animation_trigger: "on_click",
-animation_delay: 0.5,
-animation_duration: 1.0
-}
-This text will fade in when clicked.
-:::
-```
-
-### Available Animation Effects
-
-#### Entrance Animations
-
-- `appear` - Element simply appears
-- `fade` - Element fades in
-- `fly_in` - Element flies in from edge
-- `float` - Element floats into position
-- `split` - Element splits open
-- `wipe` - Element wipes into view
-- `zoom` - Element zooms in
-- `random` - Random animation
-- `wheel` - Wheel animation
-- `swivel` - Swivel animation
-- `bounce` - Element bounces in
-- `grow` - Element grows from small to full size
-- `shape` - Shape-based entrance
-- `blinds` - Blinds effect
-- `box` - Box entrance
-- `checkerboard` - Checkerboard pattern
-- `circle` - Circle shape
-- `dissolve` - Dissolve into view
-- `peek` - Element peeks into view
-- `plus` - Plus shape entrance
-- `spiral` - Spiral animation
-- `stretch` - Element stretches into view
-- `strips` - Strips effect
-- `wedge` - Wedge shape
-- `wheel` - Wheel animation
-- `curve_up` - Element curves upward
-- `curve_down` - Element curves downward
-- `drape` - Drape effect
-- `curtains` - Curtain effect
-- `flash` - Flash animation
-- `lines` - Line effect
-
-#### Emphasis Animations
-
-- `pulse` - Element pulses
-- `color` - Color change
-- `brush` - Brush effect
-- `teeter` - Element teeters
-- `wave` - Wave effect
-- `spin` - Element spins
-- `grow_with_color` - Grow with color change
-- `desaturate` - Desaturate color
-- `darken` - Darken element
-- `lighten` - Lighten element
-- `transparency` - Change transparency
-- `object_color` - Change object color
-- `complementary_color` - Change to complementary color
-- `change_line_color` - Change line color
-- `change_fill_color` - Change fill color
-
-#### Exit Animations
-
-- `fade_out` - Element fades out
-- `fly_out` - Element flies out
-- `float_out` - Element floats away
-- `split_out` - Element splits
-- `wipe_out` - Element wipes out
-- `zoom_out` - Element zooms out
-
-### Slide Transitions
-
-Slide transitions are specified in the slide settings block:
-
-```markdown
-# Example Slide
-
-{
-transition: "fade",
-transition_speed: "medium",
-transition_duration: 1.0,
-advance_time: 5.0
-}
-```
-
-Available transitions include:
-
-- `fade` - Fade transition
-- `push` - Push transition
-- `wipe` - Wipe transition
-- `split` - Split transition
-- `reveal` - Reveal transition
-- `random` - Random transition
-- `zoom` - Zoom transition
-- `cube` - 3D cube
-- `doors` - Opening doors
-- `flip` - Page flip
-- And many more (see full documentation)
-
 ## Advanced Features
 
-### Template Support
+These features are available when using the win32com backend:
 
-You can specify a PowerPoint template file as a base:
-
-```markdown
----
-template: "company_template.potx"
----
-```
-
-### Master Slide Controls
-
-Control which master slides to use:
-
-```markdown
----
-master_slides: ["Title Slide", "Content with Caption", "Comparison"]
----
-```
-
-### Slide Section Organization
-
-Organize slides into sections:
-
-```markdown
-<!-- {section: "Introduction"} -->
-
-# Welcome Slide
-
-<!-- {section: "Financial Data"} -->
-
-# Q1 Results
-```
-
-### Smart Art (Basic Support)
-
-Create simple SmartArt diagrams:
-
-```markdown
-:::smartart
-{
-x: 1in,
-y: 1in,
-width: 8in,
-height: 3in,
-type: "process",
-direction: "horizontal"
-}
-Step 1, Step 2, Step 3, Step 4
-:::
-```
-
-### Media Embedding
-
-Embed video or audio (limited support):
-
-```markdown
-:::media
-{
-x: 1in,
-y: 1in,
-width: 6in,
-height: 4in,
-type: "video",
-autoplay: false
-}
-/path/to/video.mp4
-:::
-```
+- **Animation effects** for element entrance, emphasis, and exit
+- **Slide transitions** like fade, push, wipe, etc.
+- **SmartArt** diagrams for visual representation of relationships
+- **Custom templates** for consistent branding
+- **Speaker notes** for presentation guidance
 
 ## Contributing
 
@@ -949,8 +449,214 @@ Contributions to improve the conversion tool are welcome. Please submit issues a
 
 ## License
 
-This tool is licensed under the MIT License. See the LICENSE file for details.
+This tool is licensed under the MIT License.
 
+## License
+
+This tool is licensed under the MIT License.
+
+```
+MIT License
+
+Copyright (c) 2025
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+## Complete Example
+
+Here's a complete example markdown file for a simple presentation:
+
+```markdown
+---
+slide_width: 10in
+slide_height: 7.5in
+default_font: "Calibri"
+default_font_size: 18
+company_logo: "logo.png"
+footer_text: "Confidential - 2025"
 ---
 
-_This README was generated by the Markdown to PowerPoint Converter tool._
+# Project Overview
+
+{
+layout: "Title Slide",
+background: "#003366",
+transition: "fade"
+}
+
+:::text[x:1in, y:2.5in, width:8in, height:1.5in]
+{font: "Calibri", font_size: 44, font_color: "#FFFFFF", align: center, bold: true, animation: "fade", animation_duration: 1.0}
+New Product Launch
+:::
+
+:::text[x:1in, y:4in, width:8in, height:1in]
+{font: "Calibri", font_size: 28, font_color: "#FFFFFF", align: center, animation: "fade", animation_delay: 0.5}
+Q2 2025 Roadmap
+:::
+
+# Key Objectives
+
+{
+layout: "Title and Content",
+background: "#FFFFFF",
+transition: "push"
+}
+
+:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
+{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
+Quarterly Goals
+:::
+
+:::text[x:0.5in, y:1.75in, width:9in, height:4in]
+{font: "Calibri", font_size: 24, bullet: true, animation: "fly_in", animation_direction: "left", animation_trigger: "on_click"}
+
+- Increase market share by 15%
+- Launch mobile platform in 3 new regions
+- Improve customer satisfaction scores to 90%+
+- Reduce operational costs by 8%
+- Complete Phase 1 of digital transformation
+  :::
+
+# Financial Projections
+
+{
+layout: "Title and Content",
+background: "#FFFFFF",
+transition: "fade"
+}
+
+:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
+{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
+Q2 Forecast
+:::
+
+:::chart[x:0.5in, y:1.75in, width:9in, height:4.5in]
+{
+chart_type: "column",
+title: "Revenue by Product Line ($M)",
+has_legend: true,
+legend_position: "bottom",
+x_axis_title: "Product",
+y_axis_title: "Revenue",
+animation: "fade"
+}
+Product, Q1 Actual, Q2 Forecast
+Product A, 12.4, 14.8
+Product B, 8.7, 10.5
+Product C, 15.2, 18.6
+Product D, 6.9, 11.2
+:::
+
+# Implementation Timeline
+
+{
+layout: "Title and Content",
+background: "#FFFFFF",
+transition: "wipe"
+}
+
+:::text[x:0.5in, y:0.8in, width:9in, height:0.75in]
+{font: "Calibri", font_size: 36, font_color: "#003366", bold: true}
+Project Roadmap
+:::
+
+:::smartart[x:0.5in, y:1.75in, width:9in, height:4in]
+{
+type: "process",
+animation: "wipe"
+}
+Planning, Development, Testing, Deployment, Maintenance
+:::
+
+# Thank You
+
+{
+layout: "Title Slide",
+background: "#003366",
+transition: "fade"
+}
+
+:::text[x:1in, y:2.5in, width:8in, height:1.5in]
+{font: "Calibri", font_size: 48, font_color: "#FFFFFF", align: center, bold: true, animation: "zoom"}
+Questions?
+:::
+
+:::shape[x:3.5in, y:5.5in, width:3in, height:0.75in]
+{
+shape_type: "rounded_rectangle",
+fill: "#4472C4",
+border_color: "#2F528F",
+border_width: 2pt,
+font_color: "#FFFFFF",
+align: "center",
+vertical_align: "middle",
+font_size: 20,
+bold: true,
+hyperlink: "mailto:contact@example.com",
+tooltip: "Send us an email"
+}
+contact@example.com
+:::
+```
+
+## Workflow
+
+A typical workflow for using this tool looks like this:
+
+1. **Create a markdown file** using the syntax described in this README
+2. **Run the converter**:
+   ```bash
+   python md2pptx.py presentation.md -o presentation.pptx
+   ```
+3. **Review and fine-tune** the generated PowerPoint presentation
+4. For advanced features (animations, transitions), make sure to use the win32com backend:
+   ```bash
+   python md2pptx.py presentation.md -o presentation.pptx -b win32com
+   ```
+
+## Known Limitations
+
+1. **Python-pptx backend limitations**:
+
+   - Animations and transitions are not supported
+   - Some advanced formatting options may be unavailable
+   - SmartArt is not fully supported
+
+2. **Win32com backend requirements**:
+   - Requires Windows operating system
+   - Microsoft PowerPoint must be installed
+   - Some features may depend on the PowerPoint version
+
+## Version History
+
+- **1.0.0** (April 2025)
+  - Initial release with support for text, shapes, images, tables, and charts
+  - Animation and transition support
+  - Two backend options: win32com and python-pptx
+
+## Acknowledgments
+
+- [python-pptx](https://python-pptx.readthedocs.io/) for the Python library for creating PowerPoint files
+- [PyWin32](https://github.com/mhammond/pywin32) for Windows COM integration
+- [PyYAML](https://pyyaml.org/) for YAML parsing
+
+## Contact
+
+For questions, issues, or contributions, please create an issue in the project repository or contact the project maintainer.
