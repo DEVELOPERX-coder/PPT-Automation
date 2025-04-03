@@ -15,6 +15,30 @@ from .styler import PresentationStyler
 from .utils import is_url, is_local_file
 
 
+def _apply_transition(slide, transition_type, duration=1.0, direction=None):
+    """
+    Apply a transition to a slide.
+    
+    Args:
+        slide: PowerPoint slide
+        transition_type: Type of transition
+        duration: Transition duration in seconds
+        direction: Direction for the transition (for transitions that support it)
+    """
+    # Store the transition info for later processing
+    if not hasattr(slide, '_md2ppt_transition'):
+        slide._md2ppt_transition = {}
+        
+    slide._md2ppt_transition['type'] = transition_type
+    
+    # Store additional properties
+    if duration != 1.0:
+        slide._md2ppt_transition['duration'] = duration
+    
+    if direction:
+        slide._md2ppt_transition['direction'] = direction
+
+
 class PowerPointGenerator:
     """
     Generator for creating PowerPoint presentations from parsed markdown.
@@ -219,8 +243,10 @@ class PowerPointGenerator:
             
             # Use bullet or number
             if is_numbered:
+                # For numbered lists
                 p.font.size = self.styler.get_body_font_size()
             else:
+                # For bullet lists
                 p.font.size = self.styler.get_body_font_size()
                 
             # Apply styling
@@ -405,20 +431,20 @@ class PowerPointGenerator:
             slide: PowerPoint slide
             properties: Slide properties dictionary
         """
-        # The python-pptx library has limited support for transitions and animations
-        # For advanced transitions, we might need to modify the PPTX XML directly
-        
         transition = properties.get('transition')
         if transition:
-            # Store the transition info - will be applied later via XML modification
-            if not hasattr(slide, '_md2ppt_transition'):
-                slide._md2ppt_transition = {}
+            # Parse additional properties
+            duration = 1.0
+            direction = None
             
-            slide._md2ppt_transition['type'] = transition
-            
-            # Parse additional properties like duration
             if 'duration' in properties:
                 try:
-                    slide._md2ppt_transition['duration'] = float(properties['duration'])
+                    duration = float(properties['duration'])
                 except (ValueError, TypeError):
                     pass
+                    
+            if 'direction' in properties:
+                direction = properties['direction']
+                
+            # Apply transition
+            _apply_transition(slide, transition, duration, direction)

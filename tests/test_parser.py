@@ -6,67 +6,37 @@ import os
 import unittest
 from tempfile import NamedTemporaryFile
 
-from md2ppt.parser import MarkdownParser, PPTRenderer
+from md2ppt.parser import MarkdownParser, SlideExtractor
 
 
-class TestPPTRenderer(unittest.TestCase):
-    """Tests for the PPTRenderer class."""
+class TestSlideExtractor(unittest.TestCase):
+    """Tests for the SlideExtractor class."""
     
     def setUp(self):
         """Set up test fixtures."""
-        self.renderer = PPTRenderer()
+        self.extractor = SlideExtractor()
     
-    def test_heading_level1_creates_new_slide(self):
-        """Test that level 1 heading creates a new slide."""
-        # Process a heading
-        self.renderer.heading("Slide Title", 1)
+    def test_extract_metadata(self):
+        """Test extracting metadata from comments."""
+        raw_markdown = "<!-- theme: dark -->\n<!-- transition: fade -->"
+        metadata = self.extractor._extract_metadata(raw_markdown)
         
-        # Check that current slide has the title
-        self.assertEqual(self.renderer.current_slide['title'], "Slide Title")
-        self.assertEqual(len(self.renderer.current_elements), 0)
+        self.assertIn('theme', metadata)
+        self.assertEqual(metadata['theme'], 'dark')
+        self.assertIn('transition', metadata)
+        self.assertEqual(metadata['transition'], 'fade')
     
-    def test_paragraph_adds_to_current_slide(self):
-        """Test that paragraph adds to current slide elements."""
-        # Process a paragraph
-        self.renderer.paragraph("This is a paragraph.")
+    def test_parse_properties(self):
+        """Test parsing properties string."""
+        props_str = "transition=fade, duration=1.0, direction=left"
+        props = self.extractor._parse_properties(props_str)
         
-        # Check that element was added
-        self.assertEqual(len(self.renderer.current_elements), 1)
-        self.assertEqual(self.renderer.current_elements[0]['type'], 'paragraph')
-        self.assertEqual(self.renderer.current_elements[0]['content'], "This is a paragraph.")
-    
-    def test_list_adds_to_current_slide(self):
-        """Test that list adds to current slide elements."""
-        # Create list items
-        item1 = self.renderer.list_item("Item 1")
-        item2 = self.renderer.list_item("Item 2")
-        
-        # Process a list with the items
-        self.renderer.list([item1, item2], ordered=False)
-        
-        # Check that element was added
-        self.assertEqual(len(self.renderer.current_elements), 1)
-        self.assertEqual(self.renderer.current_elements[0]['type'], 'unordered_list')
-        self.assertEqual(len(self.renderer.current_elements[0]['content']), 2)
-    
-    def test_finalize_returns_slides(self):
-        """Test that finalize returns slides."""
-        # Set up slides
-        self.renderer.heading("Slide 1", 1)
-        self.renderer.paragraph("Paragraph on slide 1.")
-        
-        self.renderer.heading("Slide 2", 1)
-        self.renderer.paragraph("Paragraph on slide 2.")
-        
-        # Finalize to get slides
-        slides = self.renderer.finalize(None)
-        
-        # Check slides
-        self.assertEqual(len(slides), 2)
-        self.assertEqual(slides[0]['title'], "Slide 1")
-        self.assertEqual(slides[1]['title'], "Slide 2")
-        self.assertEqual(slides[0]['elements'][0]['content'], "Paragraph on slide 1.")
-        self.assertEqual(slides[1]['elements'][0]['content'], "Paragraph on slide 2.")
+        self.assertIn('transition', props)
+        self.assertEqual(props['transition'], 'fade')
+        self.assertIn('duration', props)
+        self.assertEqual(props['duration'], '1.0')
+        self.assertIn('direction', props)
+        self.assertEqual(props['direction'], 'left')
 
 
 class TestMarkdownParser(unittest.TestCase):
@@ -132,6 +102,8 @@ class TestMarkdownParser(unittest.TestCase):
             self.assertEqual(slides[0]['title'], "Slide Title")
             # Check if metadata was extracted
             self.assertIn('properties', slides[0])
+            self.assertIn('theme', slides[0]['properties'])
+            self.assertEqual(slides[0]['properties']['theme'], 'dark')
         finally:
             # Clean up
             os.unlink(temp_path)

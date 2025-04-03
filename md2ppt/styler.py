@@ -213,11 +213,18 @@ class PresentationStyler:
         """
         heading_key = f"heading{level}"
         if heading_key in self.theme["fonts"]:
-            return Pt(self.theme["fonts"][heading_key]["size"])
+            font_size = self.theme["fonts"][heading_key]["size"]
         else:
             # Fallback calculation
             base_size = self.theme["fonts"]["heading2"]["size"]
-            return Pt(base_size - (level - 2) * 4)
+            font_size = base_size - (level - 2) * 4
+            
+        # Ensure the font size is valid
+        if isinstance(font_size, int) and font_size > 0:
+            return Pt(font_size)
+        else:
+            # Default to 24pt if there's any issue
+            return Pt(24)
     
     def get_body_font_size(self) -> Pt:
         """
@@ -226,7 +233,15 @@ class PresentationStyler:
         Returns:
             Font size as Pt
         """
-        return Pt(self.theme["fonts"]["body"]["size"])
+        font_size = self.theme["fonts"]["body"]["size"]
+        # Make sure we're returning a valid Pt value (100-400000)
+        # Pt value is 100 times the point size in PowerPoint
+        if isinstance(font_size, int) and font_size > 0:
+            # Converting to Pt here ensures it's properly formatted for PowerPoint
+            return Pt(font_size)
+        else:
+            # Default to 18pt if there's any issue
+            return Pt(18)
     
     def apply_background(self, slide, background_color=None):
         """

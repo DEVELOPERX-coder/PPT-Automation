@@ -447,7 +447,8 @@ def apply_advanced_features(presentation: Presentation, slide_data: List[Dict[st
         
         # Apply slide background color if specified
         if 'background_color' in properties and idx < len(presentation.slides):
-            from .utils import parse_color
+            from pptx.dml.color import RGBColor
+            from md2ppt.utils import parse_color
             color = parse_color(properties['background_color'])
             if color:
                 slide = presentation.slides[idx]

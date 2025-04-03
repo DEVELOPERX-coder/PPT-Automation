@@ -6,7 +6,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         "python-pptx>=0.6.18",
-        "mistune>=2.0.0",
+        "markdown>=3.4.0",
         "docopt>=0.6.2",
         "requests>=2.25.0",
     ],
