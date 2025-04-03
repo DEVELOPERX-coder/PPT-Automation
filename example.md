@@ -1,7 +1,7 @@
 ---
 slide_width: 10in
 slide_height: 5.625in
-default_font: "Segoe UI"
+default_font: "Calibri"
 default_font_size: 18
 ---
 

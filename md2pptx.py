@@ -230,6 +230,16 @@ def hex_to_rgb(hex_color):
     
     return 0  # Black default
 
+# Add this function after hex_to_rgb()
+def debug_element(element_type, properties, content):
+    """Print detailed debug information about an element to help troubleshoot issues."""
+    print(f"\n  Adding {element_type} element:")
+    print(f"  - Properties: {properties}")
+    if content and len(content) > 50:
+        print(f"  - Content: {content[:50]}...")
+    else:
+        print(f"  - Content: {content}")
+
 def add_text_element_win32(slide, content, properties):
     """Add a text element to the slide using win32com.
     
@@ -883,127 +893,132 @@ def add_smartart_element_win32(slide, content, properties):
     
     if not items:
         print("Warning: No data found for SmartArt")
-        return
+        return None
     
-    # Determine SmartArt type
-    smartart_type = properties.get('type', 'process').lower()
-    
-    # Map from our simple type names to MS Office SmartArt layout names
-    layout_map = {
-        'process': 'BasicProcess',
-        'cycle': 'BasicCycle',
-        'hierarchy': 'Hierarchy',
-        'pyramid': 'BasicPyramid',
-        'radial': 'BasicRadial',
-        'venn': 'BasicVenn',
-        'matrix': 'BasicMatrix',
-        'relationship': 'BasicChevron',
-        'list': 'BasicBlockList',
-        'equation': 'EquationNonMetal'
-    }
-    
-    layout_name = layout_map.get(smartart_type, 'BasicProcess')
-    
-    # Create SmartArt
-    smart_art = slide.Shapes.AddSmartArt(layout_name, left, top, width, height)
-    
-    # Add text to SmartArt nodes
-    nodes = smart_art.SmartArt.AllNodes
-    
-    # Fill in as many nodes as we have data for
-    for i, item in enumerate(items):
-        if i < nodes.Count:
-            nodes.Item(i + 1).TextFrame2.TextRange.Text = item
-    
-    # Apply animations if specified
-    apply_animation_win32(smart_art, properties)
-    
-    return smart_art
+    try:
+        # Determine SmartArt type
+        smartart_type = properties.get('type', 'process').lower()
+        
+        # Map from our simple type names to MS Office SmartArt layout names
+        layout_map = {
+            'process': 'BasicProcess',
+            'cycle': 'BasicCycle',
+            'hierarchy': 'Hierarchy',
+            'pyramid': 'BasicPyramid',
+            'radial': 'BasicRadial',
+            'venn': 'BasicVenn',
+            'matrix': 'BasicMatrix',
+            'relationship': 'BasicChevron',
+            'list': 'BasicBlockList'
+        }
+        
+        layout_name = layout_map.get(smartart_type, 'BasicProcess')
+        print(f"  Creating SmartArt with layout: {layout_name}")
+        
+        # Create SmartArt
+        smart_art = slide.Shapes.AddSmartArt(layout_name, left, top, width, height)
+        
+        # Add text to SmartArt nodes
+        nodes = smart_art.SmartArt.AllNodes
+        
+        print(f"  SmartArt has {nodes.Count} nodes, adding {len(items)} items")
+        
+        # Fill in as many nodes as we have data for
+        for i, item in enumerate(items):
+            if i < nodes.Count:
+                print(f"  Setting node {i+1} text to: {item}")
+                nodes.Item(i + 1).TextFrame2.TextRange.Text = item
+        
+        # Apply animations if specified
+        apply_animation_win32(smart_art, properties)
+        
+        return smart_art
+    except Exception as e:
+        print(f"Error creating SmartArt: {e}")
+        print("Falling back to text boxes for process visualization")
+        
+        # Create a fallback visualization using shapes and text
+        box_width = width / len(items)
+        for i, item in enumerate(items):
+            box_left = left + (i * box_width)
+            # Create a box
+            box = slide.Shapes.AddShape(1, box_left, top, box_width * 0.9, height * 0.8)
+            box.Fill.Solid()
+            box.Fill.ForeColor.RGB = hex_to_rgb("#4472C4")  # Blue
+            box.Line.ForeColor.RGB = hex_to_rgb("#2F528F")  # Darker blue
+            
+            # Add text
+            box.TextFrame.TextRange.Text = item
+            box.TextFrame.TextRange.Font.Color.RGB = hex_to_rgb("#FFFFFF")  # White
+            box.TextFrame.TextRange.ParagraphFormat.Alignment = 2  # Center
+            box.TextFrame.VerticalAnchor = 3  # Middle
+            
+            # Add connector to next box if not the last one
+            if i < len(items) - 1:
+                connector = slide.Shapes.AddLine(
+                    box_left + box_width * 0.9, top + height * 0.4,
+                    box_left + box_width * 1.1, top + height * 0.4
+                )
+                connector.Line.ForeColor.RGB = hex_to_rgb("#2F528F")
+                connector.Line.Weight = 2
+                
+                # Add arrowhead
+                connector.Line.EndArrowheadStyle = 5  # Triangle arrowhead
+        
+        return None
 
 def apply_animation_win32(shape, properties):
-    """Apply animation effects to a shape using win32com.
-    
-    Args:
-        shape: The PowerPoint shape object
-        properties: Dictionary of animation properties
-    """
-    # Only apply animations if requested in properties
+    """Apply animation effects to a shape using win32com."""
+    # For testing, comment this out to disable animations
     if 'animation' not in properties:
         return
-    
-    # Get the slide containing the shape
-    slide = shape.Parent
-    
-    # Get the animation sequence
-    sequence = slide.TimeLine.MainSequence
-    
-    # Map animation types to PowerPoint constants
-    animation_map = {
-        'fade': 4,                # ppAnimEffectFade
-        'appear': 3,              # ppAnimEffectAppear
-        'fly_in': 11,             # ppAnimEffectFly
-        'float': 16,              # ppAnimEffectFloat
-        'split': 13,              # ppAnimEffectSplit
-        'wipe': 14,               # ppAnimEffectWipe
-        'zoom': 25,               # ppAnimEffectGrowShrink
-        'bounce': 27,             # ppAnimEffectBounce
-        'spin': 41,               # ppAnimEffectSpin
-        'swivel': 40,             # ppAnimEffectSwivel
-        'pulse': 38,              # ppAnimEffectPulse
-        'color': 42,              # ppAnimEffectTeeter
-        'grow': 25                # ppAnimEffectGrowShrink
-    }
-    
-    # Get animation effect
-    animation_type = properties['animation'].lower()
-    effect_id = animation_map.get(animation_type, 4)  # Default to fade
-    
-    # Add animation effect
-    effect = sequence.AddEffect(shape, effect_id, 0, 1)  # 0 = entrance, 1 = after previous
-    
-    # Animation timing
-    if 'animation_trigger' in properties:
-        trigger = properties['animation_trigger'].lower()
-        if trigger == 'on_click':
-            effect.Timing.TriggerType = 1  # On click
-        elif trigger == 'with_previous':
-            effect.Timing.TriggerType = 2  # With previous
-        elif trigger == 'after_previous':
-            effect.Timing.TriggerType = 3  # After previous
-    
-    # Animation delay
-    if 'animation_delay' in properties:
-        try:
-            delay = float(properties['animation_delay'])
-            effect.Timing.TriggerDelayTime = delay
-        except ValueError:
-            print(f"Warning: Invalid animation delay value '{properties['animation_delay']}'")
-    
-    # Animation duration
-    if 'animation_duration' in properties:
-        try:
-            duration = float(properties['animation_duration'])
-            effect.Timing.Duration = duration
-        except ValueError:
-            print(f"Warning: Invalid animation duration value '{properties['animation_duration']}'")
-    
-    # Animation direction
-    if 'animation_direction' in properties:
-        direction = properties['animation_direction'].lower()
-        direction_map = {
-            'in': 0,      # From inside
-            'out': 1,     # From outside
-            'up': 3,      # From bottom
-            'down': 2,    # From top
-            'left': 4,    # From right
-            'right': 5    # From left
+
+    try:
+        # Get the slide containing the shape
+        slide = shape.Parent
+        
+        # Get the animation sequence
+        sequence = slide.TimeLine.MainSequence
+        
+        # Map animation types to PowerPoint constants
+        animation_map = {
+            'fade': 4,                # ppAnimEffectFade
+            'appear': 3,              # ppAnimEffectAppear
+            'fly_in': 11,             # ppAnimEffectFly
+            'float': 16,              # ppAnimEffectFloat
+            'split': 13,              # ppAnimEffectSplit
+            'wipe': 14,               # ppAnimEffectWipe
+            'zoom': 25,               # ppAnimEffectGrowShrink
+            'bounce': 27,             # ppAnimEffectBounce
+            'spin': 41,               # ppAnimEffectSpin
+            'swivel': 40,             # ppAnimEffectSwivel
+            'pulse': 38,              # ppAnimEffectPulse
+            'color': 42,              # ppAnimEffectTeeter
+            'grow': 25                # ppAnimEffectGrowShrink
         }
-        if direction in direction_map and hasattr(effect, 'Behaviors') and effect.Behaviors.Count > 0:
-            # Try to set the direction if the effect supports it
-            try:
-                effect.Behaviors(1).PropertyEffect.Direction = direction_map[direction]
-            except:
-                print(f"Warning: Could not set animation direction to '{direction}'")
+        
+        # Get animation effect
+        animation_type = properties['animation'].lower()
+        effect_id = animation_map.get(animation_type, 4)  # Default to fade
+        
+        # Add animation effect
+        effect = sequence.AddEffect(shape, effect_id, 0, 1)  # 0 = entrance, 1 = after previous
+        
+        # Animation timing
+        if 'animation_trigger' in properties:
+            trigger = properties['animation_trigger'].lower()
+            if trigger == 'on_click':
+                effect.Timing.TriggerType = 1  # On click
+            elif trigger == 'with_previous':
+                effect.Timing.TriggerType = 2  # With previous
+            elif trigger == 'after_previous':
+                effect.Timing.TriggerType = 3  # After previous
+        
+        print(f"  Added animation: {animation_type}")
+        return effect
+    except Exception as e:
+        print(f"Error applying animation: {e}")
+        return None
 
 def create_presentation_win32(slides, settings, output_file):
     """Create a PowerPoint presentation using win32com.
@@ -1142,28 +1157,40 @@ def create_presentation_win32(slides, settings, output_file):
                             slide.SlideShowTransition.Speed = 1
             
             # Process elements in order
+            
+            # Process elements in order
             for element in slide_data['elements']:
                 element_type = element['type'].lower()
                 properties = element['properties']
                 content = element['content']
                 
-                if element_type == 'text':
-                    add_text_element_win32(slide, content, properties)
+                # Add debug info
+                debug_element(element_type, properties, content)
                 
-                elif element_type == 'shape':
-                    add_shape_element_win32(slide, content, properties)
-                
-                elif element_type == 'image':
-                    add_image_element_win32(slide, content, properties)
-                
-                elif element_type == 'table':
-                    add_table_element_win32(slide, content, properties)
-                
-                elif element_type == 'chart':
-                    add_chart_element_win32(slide, content, properties)
+                try:
+                    if element_type == 'text':
+                        add_text_element_win32(slide, content, properties)
                     
-                elif element_type == 'smartart':
-                    add_smartart_element_win32(slide, content, properties)
+                    elif element_type == 'shape':
+                        add_shape_element_win32(slide, content, properties)
+                    
+                    elif element_type == 'image':
+                        add_image_element_win32(slide, content, properties)
+                    
+                    elif element_type == 'table':
+                        add_table_element_win32(slide, content, properties)
+                    
+                    elif element_type == 'chart':
+                        add_chart_element_win32(slide, content, properties)
+                        
+                    elif element_type == 'smartart':
+                        add_smartart_element_win32(slide, content, properties)
+                    
+                    else:
+                        print(f"Warning: Unknown element type '{element_type}'")
+                except Exception as e:
+                    print(f"Error adding {element_type} element: {e}")
+                    traceback.print_exc()
             
             # Add company logo if specified in global settings and not already on the slide
             if company_logo:
