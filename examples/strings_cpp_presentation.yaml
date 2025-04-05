@@ -56,7 +56,7 @@ slides:
     elements:
       # Title Text
       - type: text_box
-        left: 3
+        left: 1
         top: 3.5
         width: 7
         height: 1.5

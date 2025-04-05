@@ -216,9 +216,11 @@ class PresentationGenerator:
                 'gray': (128, 128, 128)
             }
             
-            color_lower = color_value.lower()
-            if color_lower in named_colors:
-                return named_colors[color_lower]
+            color_lower = color_value.lower().replace('{','').replace('}','')
+            if color_lower in self.variables:
+               return self.variables[color_lower]
+            # if color_lower in named_colors:
+                # return named_colors[color_lower]
         
         # Default to black if parsing fails
         logger.warning(f"Could not parse color value: {color_value}, using black")

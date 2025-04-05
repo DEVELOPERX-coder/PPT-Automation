@@ -1,0 +1,1388 @@
+# PowerPoint Presentation YAML Configuration
+# Theme: Web Development Programming Languages - Visual Guide
+# This YAML file uses only blank slides with custom elements for maximum flexibility
+
+variables:
+  # Theme colors
+  bg_color: [30, 30, 35] # Dark background for slides
+  section_bg: [40, 40, 45] # Slightly lighter background for section slides
+  text_color: [240, 240, 240] # Light text for readability
+  accent_color: [65, 165, 238] # Blue accent for highlights
+  highlight_color: [255, 200, 0] # Yellow for important elements
+
+  # Language-specific colors
+  html_color: [229, 77, 38] # HTML orange
+  css_color: [38, 77, 228] # CSS blue
+  js_color: [240, 219, 79] # JavaScript yellow
+  ts_color: [49, 120, 198] # TypeScript blue
+  python_color: [53, 114, 165] # Python blue
+  php_color: [119, 123, 179] # PHP purple
+  sql_color: [225, 151, 76] # SQL orange
+  node_color: [104, 160, 99] # Node.js green
+
+  # Content variables
+  current_year: "2025"
+
+settings:
+  # Theme settings - defining fonts and colors
+  theme:
+    fonts:
+      title:
+        name: "Arial"
+        size: 44
+      subtitle:
+        name: "Arial"
+        size: 32
+      body:
+        name: "Arial"
+        size: 18
+    colors:
+      background: "{{bg_color}}"
+      title: "{{text_color}}"
+      text: "{{text_color}}"
+      accent: "{{accent_color}}"
+
+  # Presentation properties - metadata
+  properties:
+    title: "Web Development Programming Languages"
+    author: "Web Dev Educator"
+    subject: "Programming Languages Guide"
+    keywords: "web development, programming, HTML, CSS, JavaScript, TypeScript, Python, PHP, SQL, Node.js"
+
+slides:
+  # TITLE SLIDE - Created with fully custom elements on a blank slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Title text
+      - type: text_box
+        left: 1.5
+        top: 2.5
+        width: 10
+        height: 1.5
+        text: "Web Development Programming Languages"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Subtitle text
+      - type: text_box
+        left: 1.5
+        top: 4.5
+        width: 10
+        height: 1
+        text: "A Visual Guide for Beginners"
+        font: "Arial"
+        size: 32
+        color: "{{text_color}}"
+        align: "center"
+
+      # Decorative accent line
+      - type: shape
+        shape_type: rectangle
+        left: 4.5
+        top: 4.2
+        width: 4
+        height: 0.1
+        fill_color: "{{accent_color}}"
+
+  # INTRODUCTION SECTION HEADER - Created with custom elements
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 1
+        top: 3
+        width: 11
+        height: 1.5
+        text: "Introduction"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent shape
+      - type: shape
+        shape_type: rectangle
+        left: 4.5
+        top: 4.5
+        width: 4
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # Web Development Overview Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "The Web Development Landscape"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Background shape to create visual interest
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 2
+        top: 2.5
+        width: 9
+        height: 4
+        fill_color: [40, 45, 50]
+        line_color: "{{accent_color}}"
+        line_width: 2
+
+      # Main content text
+      - type: text_box
+        left: 3
+        top: 3
+        width: 7
+        height: 3
+        text: "This guide explores the most efficient programming languages powering modern web development.\n\nHTML + CSS + JavaScript form the core foundation, with specialized languages extending functionality for different purposes."
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+        align: "center"
+
+  # HTML & CSS SECTION HEADER
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 1
+        top: 3
+        width: 11
+        height: 1.5
+        text: "HTML & CSS: The Dynamic Duo"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent
+      - type: shape
+        shape_type: rectangle
+        left: 3.5
+        top: 4.5
+        width: 6
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # HTML Overview Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "HTML: The Digital Skeleton"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # HTML logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{html_color}}"
+        text: "HTML"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about HTML
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Structures web content\n• Universal browser support\n• Created in 1993\n• Foundation of the web"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "HTML structures the content of every website you visit."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # HTML Code Example
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "HTML in Action"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "See how HTML creates the structure of a web page:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Code display with syntax highlighting
+      - type: code
+        left: 2
+        top: 2.5
+        width: 9
+        height: 5
+        code: |
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>My First Website</title>
+            </head>
+            <body>
+              <h1>Hello, World!</h1>
+              <p>Welcome to my website. It's not much, but it's honest work.</p>
+            </body>
+          </html>
+        font: "Consolas"
+        size: 18
+        color: [255, 255, 255]
+        background: true
+        background_color: [20, 20, 25]
+
+  # CSS Overview Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "CSS: Making the Web Beautiful"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # CSS logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{css_color}}"
+        text: "CSS"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about CSS
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Controls colors, layouts, fonts\n• Enables responsive design\n• Handles animations\n• Separates design from structure"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "CSS handles all visual styling of web content."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # JAVASCRIPT SECTION HEADER
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 0.5
+        top: 3
+        width: 12
+        height: 1.5
+        text: "JavaScript: The Web's Swiss Army Knife"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent
+      - type: shape
+        shape_type: rectangle
+        left: 3
+        top: 4.5
+        width: 7
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # JavaScript Overview Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "JavaScript: Making Websites Interactive"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # JavaScript logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{js_color}}"
+        text: "JS"
+        text_color: [0, 0, 0]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about JavaScript
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Created in just 10 days (1995)\n• Runs in every browser\n• Powers front and back end\n• Most popular language worldwide"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "JavaScript breathes life into otherwise static web pages."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # JavaScript Example
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "JavaScript in Action"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Example of how JavaScript adds interactivity:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Code display with syntax highlighting
+      - type: code
+        left: 2
+        top: 2.5
+        width: 9
+        height: 5
+        code: |
+          // A simple JavaScript function
+          function changeText() {
+            document.getElementById("demo").innerHTML = "Text changed!";
+            alert("You clicked the button!");
+          }
+
+          // Adding an event listener to a button
+          document.getElementById("myButton").addEventListener("click", changeText);
+        font: "Consolas"
+        size: 18
+        color: [240, 219, 79]
+        background: true
+        background_color: [20, 20, 25]
+
+  # TYPESCRIPT SECTION HEADER
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 0.5
+        top: 3
+        width: 12
+        height: 1.5
+        text: "TypeScript: JavaScript's Responsible Sibling"
+        font: "Arial"
+        size: 42
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent
+      - type: shape
+        shape_type: rectangle
+        left: 3
+        top: 4.5
+        width: 7
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # TypeScript Overview Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "TypeScript: Adding Type Safety"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # TypeScript logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{ts_color}}"
+        text: "TS"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about TypeScript
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Catches errors during development\n• Improves team collaboration\n• Better tooling & autocompletion\n• Used by major tech companies"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "TypeScript adds static typing to JavaScript for safer, more maintainable code."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # BACKEND LANGUAGES COMPARISON
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Backend Languages at a Glance"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Comparing key aspects of major backend languages:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Chart comparing backend languages
+      - type: chart
+        chart_type: bar
+        left: 1
+        top: 2.5
+        width: 11
+        height: 5
+        title: "Backend Language Comparison"
+        data:
+          categories:
+            [
+              "Learning Curve",
+              "Performance",
+              "Community Support",
+              "Enterprise Usage",
+            ]
+          series:
+            - name: "Python"
+              values: [9, 6, 9, 8]
+            - name: "PHP"
+              values: [7, 7, 8, 7]
+            - name: "Node.js"
+              values: [8, 8, 9, 7]
+
+  # PYTHON SECTION
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Python: The Readable Backend"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Python logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{python_color}}"
+        text: "PY"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about Python
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Named after Monty Python\n• Powers Instagram's backend\n• Django & Flask frameworks\n• Excellent for AI integration"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "Python stands out for its readability and versatility."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # PHP SECTION
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "PHP: Powering the Web"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # PHP logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{php_color}}"
+        text: "PHP"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about PHP
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Powers 75%+ of websites\n• WordPress foundation\n• Started as a personal project\n• Easy database integration"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "PHP remains one of the most widely used server-side languages."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # SQL SECTION
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "SQL: Speaking to Databases"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # SQL logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{sql_color}}"
+        text: "SQL"
+        text_color: [0, 0, 0]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about SQL
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• Universal database language\n• Created in the 1970s\n• Declarative approach\n• Essential for data management"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "SQL is the universal language for database communication."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # NODEJS SECTION
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Node.js: JavaScript Everywhere"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Node.js logo/visual
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 2.5
+        width: 4
+        height: 4
+        fill_color: "{{node_color}}"
+        text: "NODE"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 32
+        bold: true
+
+      # Key points about Node.js
+      - type: text_box
+        left: 6
+        top: 2.5
+        width: 6
+        height: 4
+        text: "• JavaScript on the server\n• Event-driven architecture\n• NPM ecosystem\n• Excellent for real-time apps"
+        font: "Arial"
+        size: 20
+        color: "{{text_color}}"
+
+      # Brief description
+      - type: text_box
+        left: 1.5
+        top: 6.7
+        width: 10
+        height: 0.7
+        text: "Node.js brings JavaScript to server-side development."
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+        italic: true
+        align: "center"
+
+  # LANGUAGE POPULARITY CHART
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Language Popularity ({{current_year}})"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Current popularity statistics for web development languages:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Chart showing language popularity
+      - type: chart
+        chart_type: column
+        left: 1
+        top: 2.5
+        width: 11
+        height: 5
+        title: "Developer Usage Percentage"
+        data:
+          categories:
+            [
+              "JavaScript",
+              "HTML/CSS",
+              "Python",
+              "SQL",
+              "TypeScript",
+              "PHP",
+              "Node.js",
+            ]
+          series:
+            - name: "% of Developers"
+              values: [69.7, 62.4, 43.1, 49.8, 34.2, 21.4, 33.1]
+
+  # LEARNING ROADMAP SECTION HEADER
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 0.5
+        top: 3
+        width: 12
+        height: 1.5
+        text: "Web Development Learning Roadmap"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent
+      - type: shape
+        shape_type: rectangle
+        left: 3
+        top: 4.5
+        width: 7
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # Phase 1 Learning
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Phase 1: The Fundamentals (2-3 months)"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "The first steps in your web development journey:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Timeline visualization with shapes
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 2.5
+        width: 11
+        height: 0.8
+        fill_color: [50, 120, 190]
+        text: "HTML & CSS Basics (3-4 weeks)"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 18
+        bold: true
+      - type: text_box
+        left: 1
+        top: 3.4
+        width: 11
+        height: 0.7
+        text: "HTML tags, CSS properties, box model, flexbox, responsive design"
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 4.3
+        width: 11
+        height: 0.8
+        fill_color: [70, 140, 210]
+        text: "JavaScript Fundamentals (4-6 weeks)"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 18
+        bold: true
+      - type: text_box
+        left: 1
+        top: 5.2
+        width: 11
+        height: 0.7
+        text: "Variables, functions, DOM manipulation, events, arrays, objects"
+        font: "Arial"
+        size: 16
+        color: "{{text_color}}"
+
+  # Phase 2 Learning
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Phase 2: Expanding Your Toolkit (3-4 months)"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Building upon your foundational knowledge:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Timeline visualization with shapes
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 2.5
+        width: 11
+        height: 0.8
+        fill_color: [90, 160, 230]
+        text: "Responsive Design & CSS Frameworks (2-3 weeks)"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 18
+        bold: true
+
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 3.6
+        width: 11
+        height: 0.8
+        fill_color: [110, 180, 250]
+        text: "JavaScript Advanced Concepts (4-5 weeks)"
+        text_color: [255, 255, 255]
+        font: "Arial"
+        size: 18
+        bold: true
+
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 4.7
+        width: 11
+        height: 0.8
+        fill_color: [130, 200, 255]
+        text: "Version Control & Deployment (1-2 weeks)"
+        text_color: [0, 0, 0]
+        font: "Arial"
+        size: 18
+        bold: true
+
+  # Phase 3 Learning
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Phase 3: Specialization (3-6 months)"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Choose your path and develop expertise:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Two paths visualization with shapes
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 2.5
+        width: 5.3
+        height: 4
+        fill_color: [80, 150, 220]
+        line_color: [255, 255, 255]
+        line_width: 2
+      - type: text_box
+        left: 1.2
+        top: 2.7
+        width: 5
+        height: 0.8
+        text: "Front-End Path"
+        font: "Arial"
+        size: 22
+        bold: true
+        color: [255, 255, 255]
+      - type: text_box
+        left: 1.2
+        top: 3.5
+        width: 5
+        height: 3
+        text: "• React, Vue, or Angular\n• State management\n• CSS-in-JS\n• Component architecture"
+        font: "Arial"
+        size: 16
+        color: [255, 255, 255]
+
+      - type: shape
+        shape_type: rectangle
+        left: 6.7
+        top: 2.5
+        width: 5.3
+        height: 4
+        fill_color: [60, 130, 200]
+        line_color: [255, 255, 255]
+        line_width: 2
+      - type: text_box
+        left: 6.9
+        top: 2.7
+        width: 5
+        height: 0.8
+        text: "Back-End Path"
+        font: "Arial"
+        size: 22
+        bold: true
+        color: [255, 255, 255]
+      - type: text_box
+        left: 6.9
+        top: 3.5
+        width: 5
+        height: 3
+        text: "• Node.js, Python, or PHP\n• Server architecture\n• RESTful APIs\n• Database design"
+        font: "Arial"
+        size: 16
+        color: [255, 255, 255]
+
+  # RESOURCES SECTION HEADER
+  - type: blank
+    background:
+      color: "{{section_bg}}"
+    elements:
+      # Section title
+      - type: text_box
+        left: 0.5
+        top: 3
+        width: 12
+        height: 1.5
+        text: "Continuous Learning Resources"
+        font: "Arial"
+        size: 44
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Decorative accent
+      - type: shape
+        shape_type: rectangle
+        left: 3
+        top: 4.5
+        width: 7
+        height: 0.1
+        fill_color: "{{highlight_color}}"
+
+  # Resources Slide
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Resources for Staying Updated"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Left column
+      - type: text_box
+        left: 1
+        top: 2
+        width: 5.5
+        height: 0.8
+        text: "Documentation & Courses"
+        font: "Arial"
+        size: 24
+        bold: true
+        color: "{{text_color}}"
+
+      - type: text_box
+        left: 1
+        top: 3
+        width: 5.5
+        height: 3
+        text: "• MDN Web Docs\n• freeCodeCamp\n• The Odin Project\n• Frontend Masters\n• Coursera & Udemy"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+
+      # Right column
+      - type: text_box
+        left: 6.5
+        top: 2
+        width: 5.5
+        height: 0.8
+        text: "Community Engagement"
+        font: "Arial"
+        size: 24
+        bold: true
+        color: "{{text_color}}"
+
+      - type: text_box
+        left: 6.5
+        top: 3
+        width: 5.5
+        height: 3
+        text: "• Stack Overflow\n• Dev.to\n• GitHub (Open Source)\n• Discord communities\n• Local meetups"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+
+  # Practical Implementation
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Practical Implementation"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Intro text
+      - type: text_box
+        left: 1
+        top: 1.7
+        width: 11
+        height: 0.5
+        text: "Three approaches to reinforce your learning:"
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Three approaches visualized with triangles
+      - type: shape
+        shape_type: triangle
+        left: 1
+        top: 2.5
+        width: 3
+        height: 3
+        fill_color: [60, 130, 200]
+      - type: text_box
+        left: 1.5
+        top: 5.7
+        width: 2
+        height: 0.5
+        text: "Side Projects"
+        font: "Arial"
+        size: 16
+        bold: true
+        align: "center"
+        color: "{{text_color}}"
+
+      - type: shape
+        shape_type: triangle
+        left: 5
+        top: 2.5
+        width: 3
+        height: 3
+        fill_color: [90, 160, 230]
+      - type: text_box
+        left: 5.5
+        top: 5.7
+        width: 2
+        height: 0.5
+        text: "Code Review"
+        font: "Arial"
+        size: 16
+        bold: true
+        align: "center"
+        color: "{{text_color}}"
+
+      - type: shape
+        shape_type: triangle
+        left: 9
+        top: 2.5
+        width: 3
+        height: 3
+        fill_color: [120, 190, 255]
+      - type: text_box
+        left: 9.5
+        top: 5.7
+        width: 2
+        height: 0.5
+        text: "Teaching Others"
+        font: "Arial"
+        size: 16
+        bold: true
+        align: "center"
+        color: "{{text_color}}"
+
+  # CONCLUSION SLIDE
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Slide title
+      - type: text_box
+        left: 1
+        top: 0.7
+        width: 11
+        height: 0.8
+        text: "Keep Building, Keep Learning"
+        font: "Arial"
+        size: 36
+        color: "{{text_color}}"
+        bold: true
+        align: "center"
+
+      # Main content
+      - type: text_box
+        left: 2
+        top: 2
+        width: 9
+        height: 1
+        text: "Web development is a marathon, not a sprint. The foundations remain stable even as new tools emerge."
+        font: "Arial"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Visual star highlight
+      - type: shape
+        shape_type: star
+        left: 5
+        top: 3.5
+        width: 3
+        height: 3
+        fill_color: "{{highlight_color}}"
+
+      # Final message
+      - type: text_box
+        left: 3
+        top: 6.5
+        width: 7
+        height: 1
+        text: "Happy coding! May your bugs be few and your coffee strong. 💻☕"
+        font: "Arial"
+        size: 20
+        bold: true
+        align: "center"
+        color: "{{text_color}}"
