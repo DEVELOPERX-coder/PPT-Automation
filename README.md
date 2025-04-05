@@ -1,309 +1,229 @@
-# md2ppt: Markdown to PowerPoint Converter
+# PowerPoint Automation Project
 
-A powerful Python package that converts Markdown files into feature-rich Microsoft PowerPoint presentations.
+A Python-based tool for automating the creation of PowerPoint presentations from custom-formatted input files.
 
 ## Features
 
-- Convert Markdown files to PowerPoint presentations
-- Support for advanced PowerPoint features:
-  - Animations
-  - Transitions
-  - Styling (fonts, colors, formatting)
-  - Layout control
-  - Size adjustments
-  - And more!
-- Customizable themes
-- Command-line interface
-- Extensive markdown support
+- Convert YAML, JSON, or simple text files into professional PowerPoint presentations
+- Support for various slide types (title, content, two-column, section headers, etc.)
+- Variable substitution for dynamic content
+- Custom styling and theming
+- Image and shape support
+- Command-line interface for easy integration into workflows
 
 ## Installation
 
+### Prerequisites
+
+- Python 3.7 or higher
+- pip (Python package installer)
+
+### Setup
+
+1. Clone this repository:
+
+   ```bash
+   git clone https://github.com/yourusername/ppt-automator.git
+   cd ppt-automator
+   ```
+
+2. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## Usage
+
+### Basic Usage
+
+Generate a PowerPoint presentation from an input file:
+
 ```bash
-# Install from PyPI
-pip install md2ppt
-
-# Install from source
-git clone https://github.com/yourusername/md2ppt.git
-cd md2ppt
-pip install -e .
+python main.py path/to/input_file.yaml
 ```
 
-## Quick Start
-
-Convert a markdown file to PowerPoint:
+### Advanced Options
 
 ```bash
-md2ppt example.md
+python main.py path/to/input_file.yaml -o output.pptx -t template.pptx -v
 ```
-
-This will create `example.pptx` in the same directory.
-
-With a custom theme:
-
-```bash
-md2ppt example.md --theme=professional --config=custom_theme.json
-```
-
-## Markdown Syntax
-
-md2ppt supports standard Markdown syntax with special annotations for PowerPoint features.
-
-### Slides and Headers
-
-Each level 1 heading (`#`) creates a new slide with the heading text as the title:
-
-```markdown
-# Slide Title
-
-Content goes here
-
-# Next Slide Title
-
-More content
-```
-
-Level 2+ headings (`##`, `###`, etc.) create headings within a slide.
-
-### Text Formatting
-
-Standard Markdown formatting is supported:
-
-- **Bold text**: `**bold**`
-- _Italic text_: `*italic*`
-- ~~Strikethrough~~: `~~strikethrough~~`
-- `Code`: `` `code` ``
-- [Links](https://example.com): `[Links](https://example.com)`
-
-### Lists
-
-Both ordered and unordered lists work as expected:
-
-```markdown
-- Unordered item 1
-- Unordered item 2
-  - Nested item
-
-1. Ordered item 1
-2. Ordered item 2
-```
-
-### Images
-
-Include images in your slides:
-
-```markdown
-![Alt text](path/to/image.jpg)
-```
-
-### Code Blocks
-
-Code blocks are styled with syntax highlighting:
-
-````markdown
-```python
-def hello_world():
-    print("Hello, world!")
-```
-````
-
-### Tables
-
-Tables are supported:
-
-```markdown
-| Header 1 | Header 2 |
-| -------- | -------- |
-| Cell 1   | Cell 2   |
-| Cell 3   | Cell 4   |
-```
-
-### Block Quotes
-
-```markdown
-> This is a blockquote
-> It can span multiple lines
-```
-
-## PowerPoint Features
-
-### Slide Properties
-
-Control slide properties with HTML comments:
-
-```markdown
-<!-- slide: transition=fade, background_color=lightblue -->
-
-# Slide with Custom Properties
-```
-
-### Global Properties
-
-Set global presentation properties at the beginning of the file:
-
-```markdown
-<!-- theme: professional -->
-<!-- transition: fade -->
-
-# First Slide
-```
-
-### Animations
-
-Add animations to slide elements:
-
-```markdown
-- This item will fade in <!-- animation: fade, duration=0.5, delay=0.2 -->
-- This item will fly in from the left <!-- animation: fly_in, direction=left -->
-```
-
-### Supported Animations
-
-- `fade`: Fade in/out
-- `appear`: Appear
-- `fly_in`: Fly in effect
-- `float_in`: Float in effect
-- `split`: Split effect
-- `wipe`: Wipe effect
-- `zoom`: Zoom effect
-- `grow`: Grow effect
-- `spin`: Spin effect
-- `swivel`: Swivel effect
-- `pulse`: Pulse effect
-- `bounce`: Bounce effect
-
-### Supported Transitions
-
-- `fade`: Fade transition
-- `push`: Push transition
-- `wipe`: Wipe transition
-- `split`: Split transition
-- `cut`: Cut transition
-- `random`: Random transition
-- `shape`: Shape transition
-- `blinds`: Blinds transition
-- `checker`: Checker transition
-- `comb`: Comb transition
-- `dissolve`: Dissolve transition
-- `zoom`: Zoom transition
-
-## Customization
-
-### Theme Files
-
-Create custom themes by defining a JSON file:
-
-```json
-{
-  "name": "professional",
-  "slide_width": 10,
-  "slide_height": 7.5,
-  "colors": {
-    "background": [255, 255, 255],
-    "title": [0, 51, 102],
-    "heading": [0, 102, 153],
-    "body": [0, 0, 0]
-  },
-  "fonts": {
-    "title": {
-      "name": "Arial",
-      "size": 44,
-      "bold": true
-    },
-    "body": {
-      "name": "Arial",
-      "size": 20
-    }
-  }
-}
-```
-
-### Command Line Options
-
-```
-Usage:
-    md2ppt <input_file> [<output_file>] [--theme=<theme>] [--config=<config_file>]
 
 Options:
-    -h --help               Show this help
-    --theme=<theme>         Specify a theme [default: default]
-    --config=<config_file>  Specify a configuration file
+
+- `-o, --output`: Specify the output PowerPoint file path
+- `-t, --template`: Use a PowerPoint template file as a base
+- `-v, --verbose`: Enable verbose logging
+
+## Input File Format
+
+The tool supports three input formats: YAML, JSON, and simple text. YAML is the recommended format for its readability and structure.
+
+### YAML Format
+
+```yaml
+# Define variables that can be referenced throughout the document
+variables:
+  company_name: "Acme Corporation"
+  presenter: "John Smith"
+  date: "April 5, 2025"
+
+# Presentation-wide settings
+settings:
+  style:
+    title_font: "Calibri"
+    title_size: 44
+    body_font: "Calibri"
+    body_size: 18
+    theme_color: [41, 105, 176] # RGB values for primary color
+
+# Slides definition
+slides:
+  # Title slide
+  - type: title_slide
+    title: "{{company_name}} Quarterly Report"
+    subtitle: "Presented by {{presenter}} | {{date}}"
+
+  # Content slide with bullets
+  - type: title_and_content
+    title: "Agenda"
+    content:
+      - "Item 1"
+      - "Item 2"
+      - "Item 3"
+
+  # Slide with an image
+  - type: title_and_content
+    title: "Product Highlights"
+    content: "This is our flagship product."
+    image:
+      path: "path/to/image.png"
+      left: 5
+      top: 2.5
+      width: 4
+      height: 3
 ```
+
+### Text Format
+
+Simple text format is also supported:
+
+```
+# Main Presentation Title
+* Presented by John Smith
+
+---
+
+## Agenda
+
+- Item 1
+- Item 2
+- Item 3
+
+---
+
+## Product Highlights
+
+This is our flagship product.
+
+!image: path/to/image.jpg
+```
+
+## Supported Slide Types
+
+| Type                | Description                          |
+| ------------------- | ------------------------------------ |
+| `title_slide`       | Title slide with optional subtitle   |
+| `title_and_content` | Title with content (text or bullets) |
+| `section`           | Section header slide                 |
+| `two_content`       | Slide with two columns of content    |
+| `title_only`        | Slide with title and custom elements |
+| `blank`             | Blank slide with custom elements     |
+
+## Variables
+
+You can define variables at the top of your input file and reference them throughout using the `{{variable_name}}` syntax. This is useful for:
+
+- Company names, presenter information, dates
+- Repeated values or data points
+- Ensuring consistency across the presentation
+
+## Custom Elements
+
+For `title_only` and `blank` slide types, you can add custom elements:
+
+```yaml
+elements:
+  - type: text_box
+    left: 1
+    top: 2
+    width: 8
+    height: 1
+    text: "Custom text box"
+    font: "Calibri"
+    size: 20
+
+  - type: shape
+    shape_type: star
+    left: 5
+    top: 3
+    width: 2
+    height: 2
+    fill_color: [255, 215, 0] # Gold
+    text: "93%"
+```
+
+## Formatting Guidelines
+
+### Position and Size
+
+All position and size values are specified in inches:
+
+- `left`: Distance from the left edge of the slide
+- `top`: Distance from the top edge of the slide
+- `width`: Width of the element
+- `height`: Height of the element
+
+### Colors
+
+Colors can be specified in several formats:
+
+- RGB array: `[255, 0, 0]` (red)
+- Hex: `"#FF0000"` (red)
+- Named color: `"red"`
 
 ## Examples
 
-Check the `examples/` directory for example Markdown files and themes.
+Check the `examples/` directory for sample input files and their corresponding PowerPoint outputs.
 
-## Markdown to PowerPoint Mapping
+## Best Practices
 
-| Markdown Element  | PowerPoint Element      |
-| ----------------- | ----------------------- |
-| # Heading 1       | New slide with title    |
-| ## Heading 2      | Heading (large)         |
-| ### Heading 3     | Heading (medium)        |
-| #### Heading 4    | Heading (small)         |
-| Paragraph         | Text box                |
-| \* Unordered list | Bullet list             |
-| 1. Ordered list   | Numbered list           |
-| ![Image](src)     | Image                   |
-| > Blockquote      | Quote box with styling  |
-| `code`            | Code block with styling |
-| \|table\|         | Table                   |
-| [Link](url)       | Hyperlink               |
-| **Bold**          | Bold text               |
-| _Italic_          | Italic text             |
-| ~~Strikethrough~~ | Strikethrough text      |
-| `Inline code`     | Monospace text          |
-| HTML comments     | Slide properties        |
+1. **Start with a template**: Create a YAML file based on the examples provided in the `examples/` directory.
 
-## Development
+2. **Use variables**: Define variables for any repeated content to ensure consistency.
 
-### Project Structure
+3. **Organize with sections**: Use section slides to create a clear structure in your presentation.
 
-```
-md2ppt/
-│
-├── md2ppt/
-│   ├── __init__.py
-│   ├── main.py          # Command-line entry point
-│   ├── parser.py        # Markdown parsing logic
-│   ├── ppt_generator.py # PowerPoint generation
-│   ├── styler.py        # Presentation styling
-│   ├── utils.py         # Utility functions
-│   └── advanced_features.py # Advanced PowerPoint features
-│
-├── tests/               # Unit tests
-├── examples/            # Example files
-├── README.md            # Project documentation
-├── requirements.txt     # Dependencies
-└── setup.py             # Installation script
-```
+4. **Test incrementally**: Start with a few slides and add more as you verify the output.
 
-### Running Tests
+5. **Custom styling**: Define presentation-wide styling in the `settings` section.
 
-```bash
-python -m unittest discover -s tests
-```
+## Troubleshooting
 
-## Requirements
+### Common Issues
 
-- Python 3.6+
-- python-pptx
-- mistune
-- docopt
-- requests
+- **Images not appearing**: Ensure image paths are correct and accessible.
+- **Variable not replacing**: Check for typos in variable names. Variable references are case-sensitive.
+- **Slide layout issues**: Verify positioning values (left, top, width, height) are appropriate.
 
-## License
+### Error Messages
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+- "Image not found": Check that the image file exists at the specified path.
+- "Error parsing YAML file": Validate your YAML syntax using an online YAML validator.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Acknowledgements
+## License
 
-This project uses:
-
-- [python-pptx](https://python-pptx.readthedocs.io/) for PowerPoint file manipulation
-- [mistune](https://mistune.readthedocs.io/) for Markdown parsing
-- [docopt](http://docopt.org/) for command-line interface
+This project is licensed under the MIT License - see the LICENSE file for details.

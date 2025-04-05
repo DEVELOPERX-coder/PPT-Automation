@@ -1,0 +1,135 @@
+# Example presentation configuration
+
+# Define variables that can be referenced throughout the document
+variables:
+  company_name: "Acme Corporation"
+  presenter: "John Smith"
+  date: "April 5, 2025"
+  theme_color: [41, 105, 176] # RGB values for a blue color
+
+# Presentation-wide settings
+settings:
+  style:
+    title_font: "Calibri"
+    title_size: 44
+    body_font: "Calibri"
+    body_size: 18
+    theme_color: [41, 105, 176] # RGB values for primary color
+
+# Slides definition
+slides:
+  # Title slide
+  - type: title_slide
+    title: "{{company_name}} Quarterly Report"
+    subtitle: "Presented by {{presenter}} | {{date}}"
+
+  # Agenda slide
+  - type: title_and_content
+    title: "Agenda"
+    content:
+      - "Q1 Financial Overview"
+      - "Product Performance"
+      - "Customer Feedback"
+      - "Market Analysis"
+      - "Goals for Q2"
+
+  # Section header
+  - type: section
+    title: "Q1 Financial Overview"
+
+  # Financial data slide
+  - type: title_and_content
+    title: "Q1 Financial Results"
+    content:
+      - "Revenue: $4.2M (+12% YoY)"
+      - "Operating Expenses: $2.8M (+5% YoY)"
+      - "Net Profit: $1.4M (+24% YoY)"
+      - "Profit Margin: 33% (+4% YoY)"
+
+  # Two-column slide
+  - type: two_content
+    title: "Revenue Breakdown"
+    left_content:
+      - "Product Revenue: $3.5M"
+      - "Service Revenue: $0.7M"
+    right_content:
+      - "North America: 65%"
+      - "Europe: 20%"
+      - "Asia Pacific: 10%"
+      - "Rest of World: 5%"
+
+  # Section header
+  - type: section
+    title: "Product Performance"
+
+  # Slide with an image
+  - type: title_and_content
+    title: "Product Highlights"
+    content:
+      - "Product A: 42% of sales"
+      - "Product B: 35% of sales"
+      - "Product C: 23% of sales"
+
+  # Section header
+  - type: section
+    title: "Customer Feedback"
+
+  # Custom slide with elements - using text box only
+  - type: title_only
+    title: "Customer Satisfaction"
+    elements:
+      - type: text_box
+        left: 1
+        top: 2
+        width: 8
+        height: 1
+        text: "Overall customer satisfaction increased by 15% this quarter!"
+        font: "Calibri"
+        size: 20
+      - type: text_box
+        left: 5
+        top: 3
+        width: 2
+        height: 2
+        text: "93%"
+        font: "Calibri Bold"
+        size: 28
+
+  # Slide with bullets
+  - type: title_and_content
+    title: "Customer Testimonials"
+    content:
+      - '"Your product has completely transformed our workflow." - ABC Inc.'
+      - '"We''ve seen a 30% increase in productivity." - XYZ Corp.'
+      - '"The best solution we''ve used in years." - 123 Industries'
+
+  # Section header
+  - type: section
+    title: "Market Analysis"
+
+  # Market data slide
+  - type: title_and_content
+    title: "Market Share"
+    content:
+      - "{{company_name}}: 32% (+5%)"
+      - "Competitor A: 28% (-2%)"
+      - "Competitor B: 24% (0%)"
+      - "Others: 16% (-3%)"
+
+  # Section header
+  - type: section
+    title: "Goals for Q2"
+
+  # Goals slide
+  - type: title_and_content
+    title: "Q2 Objectives"
+    content:
+      - "Launch Product D in international markets"
+      - "Increase customer retention rate to 95%"
+      - "Expand service offerings in APAC region"
+      - "Reduce operational costs by 8%"
+
+  # Thank you slide
+  - type: title_slide
+    title: "Thank You"
+    subtitle: "Questions?"

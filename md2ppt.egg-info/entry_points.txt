@@ -1,2 +1,0 @@
-[console_scripts]
-md2ppt = md2ppt.main:main
