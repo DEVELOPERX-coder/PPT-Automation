@@ -1,0 +1,1064 @@
+# Strings in C++ - Arrays With Character(s)
+# PowerPoint Presentation YAML Configuration
+
+variables:
+  # Colors
+  bg_color: [26, 26, 26] # Dark charcoal (#1A1A1A)
+  title_gradient_start: [0, 255, 255] # Cyan (#00FFFF)
+  title_gradient_end: [0, 191, 255] # Light Blue (#00BFFF)
+  subtitle_color: [187, 134, 252] # Light Purple (#BB86FC)
+  text_color: [224, 224, 224] # Light Gray (#E0E0E0)
+  code_color: [3, 218, 198] # Light Green (#03DAC6)
+  dark_gray: [45, 45, 45] # Dark Gray (#2D2D2D)
+  very_dark_gray: [37, 37, 37] # Very Dark Gray (#252525)
+  c_style_color: [0, 255, 255] # Cyan for C-style
+  std_string_color: [187, 134, 252] # Light Purple for std::string
+  s_color: [0, 255, 255] # Cyan (#00FFFF)
+  t_color: [64, 255, 255] # #40FFFF
+  r_color: [128, 255, 255] # #80FFFF
+  i_color: [0, 191, 255] # #00BFFF
+  n_color: [64, 191, 255] # #40BFFF
+  g_color: [128, 191, 255] # #80BFFF
+  cell_text_color: [255, 255, 255] # White
+  null_terminator_color: [255, 117, 151] # Light Red (#FF7597)
+  red_color: [244, 67, 54] # Red (#F44336)
+
+settings:
+  theme:
+    fonts:
+      title:
+        name: "Segoe UI Light"
+        size: 40
+      subtitle:
+        name: "Segoe UI"
+        size: 32
+      body:
+        name: "Segoe UI"
+        size: 20
+    colors:
+      background: "#1A1A1A" # Dark charcoal
+      title: [0, 255, 255] # Cyan
+      text: [224, 224, 224] # Light Gray
+      accent: [0, 191, 255] # Light Blue
+
+  properties:
+    title: "Strings in C++ - Arrays With Character(s)"
+    author: "DSAin45"
+    subject: "C++ Programming"
+    keywords: "strings, C++, programming, DSA"
+    category: "Educational"
+
+slides:
+  # SLIDE 1: TITLE SLIDE
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Title Text
+      - type: text_box
+        left: 3
+        top: 3.5
+        width: 7
+        height: 1.5
+        text: "🚀 STRINGS IN C++"
+        font: "Segoe UI Light"
+        size: 48
+        bold: true
+        color: "{{title_gradient_start}}"
+        align: "center"
+
+      # Subtitle Text
+      - type: text_box
+        left: 3.5
+        top: 5.2
+        width: 6
+        height: 1
+        text: "Arrays With Character(s)"
+        font: "Segoe UI"
+        size: 32
+        color: "{{subtitle_color}}"
+        align: "center"
+
+      # Day Indicator
+      - type: text_box
+        left: 4.5
+        top: 6.5
+        width: 3
+        height: 0.6
+        text: "#DSAin45 - Day 4"
+        font: "Segoe UI"
+        size: 18
+        color: "{{text_color}}"
+        align: "center"
+
+      # Character S
+      - type: text_box
+        left: 3.5
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "S"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{s_color}}"
+        align: "center"
+
+      # Character T
+      - type: text_box
+        left: 4.4
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "T"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{t_color}}"
+        align: "center"
+
+      # Character R
+      - type: text_box
+        left: 5.3
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "R"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{r_color}}"
+        align: "center"
+
+      # Character I
+      - type: text_box
+        left: 6.2
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "I"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{i_color}}"
+        align: "center"
+
+      # Character N
+      - type: text_box
+        left: 7.1
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "N"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{n_color}}"
+        align: "center"
+
+      # Character G
+      - type: text_box
+        left: 8.0
+        top: 7.5
+        width: 0.7
+        height: 0.7
+        text: "G"
+        font: "Consolas"
+        size: 36
+        bold: true
+        color: "{{g_color}}"
+        align: "center"
+
+  # SLIDE 2: WHAT ARE STRINGS?
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Section Header
+      - type: text_box
+        left: 1
+        top: 0.8
+        width: 10
+        height: 1
+        text: "What Exactly ARE Strings?"
+        font: "Segoe UI Light"
+        size: 40
+        bold: true
+        color: "{{title_gradient_start}}"
+
+      # Definition Paragraph
+      - type: text_box
+        left: 1
+        top: 2
+        width: 10
+        height: 0.8
+        text: "At their core, strings are sequences of characters. But in C++, there are two main ways to represent them:"
+        font: "Segoe UI"
+        size: 20
+        color: "{{text_color}}"
+
+      # C-style Strings Section Container
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 1
+        top: 3
+        width: 5.5
+        height: 5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1
+
+      # C-style Strings Heading
+      - type: text_box
+        left: 1.25
+        top: 3.2
+        width: 5
+        height: 0.7
+        text: "1. C-style Strings (char arrays)"
+        font: "Segoe UI"
+        size: 22
+        bold: true
+        color: "{{c_style_color}}"
+
+      # C-style Strings Code Example
+      - type: code
+        left: 1.25
+        top: 4
+        width: 5
+        height: 0.6
+        code: "char greeting[] = \"Hello\"; // Compiler adds null terminator '\\0'"
+        font: "Consolas"
+        size: 16
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{very_dark_gray}}"
+
+      # C-style Memory Visualization - Cell 1 (H)
+      - type: shape
+        shape_type: rectangle
+        left: 2
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "H"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # C-style Memory Visualization - Cell 2 (e)
+      - type: shape
+        shape_type: rectangle
+        left: 2.65
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "e"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # C-style Memory Visualization - Cell 3 (l)
+      - type: shape
+        shape_type: rectangle
+        left: 3.3
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # C-style Memory Visualization - Cell 4 (l)
+      - type: shape
+        shape_type: rectangle
+        left: 3.95
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # C-style Memory Visualization - Cell 5 (o)
+      - type: shape
+        shape_type: rectangle
+        left: 4.6
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "o"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # C-style Memory Visualization - Cell 6 (\0)
+      - type: shape
+        shape_type: rectangle
+        left: 5.25
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "\\0"
+        text_color: "{{null_terminator_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Null Terminator Label
+      - type: text_box
+        left: 1.25
+        top: 5.6
+        width: 5
+        height: 0.4
+        text: "That \\0 at the end is the null terminator - it tells functions where the string ends."
+        font: "Segoe UI"
+        size: 14
+        italic: true
+        color: "{{text_color}}"
+
+      # std::string Section Container
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 7.5
+        top: 3
+        width: 5.5
+        height: 5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 1
+
+      # std::string Heading
+      - type: text_box
+        left: 7.75
+        top: 3.2
+        width: 5
+        height: 0.7
+        text: "2. C++ std::string"
+        font: "Segoe UI"
+        size: 22
+        bold: true
+        color: "{{std_string_color}}"
+
+      # std::string Code Example
+      - type: code
+        left: 7.75
+        top: 4
+        width: 5
+        height: 0.6
+        code: 'std::string greeting = "Hello";'
+        font: "Consolas"
+        size: 16
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{very_dark_gray}}"
+
+      # std::string Description
+      - type: text_box
+        left: 7.75
+        top: 4.8
+        width: 5
+        height: 2.5
+        text: "Under the hood, std::string is a class that manages:\n• A dynamically allocated character array\n• Size tracking\n• Memory management\n• Various utility methods"
+        font: "Segoe UI"
+        size: 16
+        color: "{{text_color}}"
+
+      # Bottom Quote
+      - type: text_box
+        left: 1
+        top: 8.3
+        width: 10
+        height: 0.6
+        text: "_If C-style strings are a manual typewriter, std::string is a modern word processor with spell-check, auto-save, and therapy built in._"
+        font: "Segoe UI"
+        size: 16
+        italic: true
+        color: "{{text_color}}"
+
+  # SLIDE 3: MEMORY LAYOUT
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Section Header
+      - type: text_box
+        left: 1
+        top: 0.8
+        width: 10
+        height: 1
+        text: "String Memory Layout"
+        font: "Segoe UI Light"
+        size: 40
+        bold: true
+        color: "{{title_gradient_start}}"
+
+      # Left Side - C-style Subheading
+      - type: text_box
+        left: 1
+        top: 2
+        width: 5
+        height: 0.7
+        text: "C-style String Memory:"
+        font: "Segoe UI"
+        size: 24
+        bold: true
+        color: "{{c_style_color}}"
+
+      # Left Side - C-style Bullet Points
+      - type: text_box
+        left: 1
+        top: 2.8
+        width: 5
+        height: 2.5
+        text: "• Fixed size determined at declaration\n• Contiguous memory\n• Relies on null terminator to determine end\n• Prone to buffer overflows"
+        font: "Segoe UI"
+        size: 18
+        color: "{{text_color}}"
+
+      # C-style Memory Blocks - Each cell (H, e, l, l, o, \0, X, Y)
+      # Cell 1 (H)
+      - type: shape
+        shape_type: rectangle
+        left: 1.5
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "H"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 2 (e)
+      - type: shape
+        shape_type: rectangle
+        left: 2.15
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "e"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 3 (l)
+      - type: shape
+        shape_type: rectangle
+        left: 2.8
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 4 (l)
+      - type: shape
+        shape_type: rectangle
+        left: 3.45
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 5 (o)
+      - type: shape
+        shape_type: rectangle
+        left: 4.1
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "o"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 6 (\0)
+      - type: shape
+        shape_type: rectangle
+        left: 4.75
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1.5
+        text: "\\0"
+        text_color: "{{null_terminator_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 7 (X) - Buffer overflow
+      - type: shape
+        shape_type: rectangle
+        left: 5.4
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{red_color}}"
+        line_width: 1.5
+        text: "X"
+        text_color: "{{red_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Cell 8 (Y) - Buffer overflow
+      - type: shape
+        shape_type: rectangle
+        left: 6.05
+        top: 5
+        width: 0.6
+        height: 0.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{red_color}}"
+        line_width: 1.5
+        text: "Y"
+        text_color: "{{red_color}}"
+        font: "Consolas"
+        size: 16
+
+      # Address Labels for memory cells
+      - type: text_box
+        left: 1.5
+        top: 5.6
+        width: 5.5
+        height: 0.3
+        text: "0x100     0x101     0x102     0x103     0x104     0x105     0x106     0x107"
+        font: "Consolas"
+        size: 10
+        color: [128, 128, 128] # Gray
+
+      # Overflow Arrow
+      - type: shape
+        shape_type: right_arrow
+        left: 4.85
+        top: 5.8
+        width: 1.25
+        height: 0.3
+        fill_color: "{{red_color}}"
+        line_color: "{{red_color}}"
+        line_width: 1
+
+      # Right Side - std::string Subheading
+      - type: text_box
+        left: 7
+        top: 2
+        width: 5
+        height: 0.7
+        text: "std::string Memory:"
+        font: "Segoe UI"
+        size: 24
+        bold: true
+        color: "{{std_string_color}}"
+
+      # Right Side - std::string Bullet Points
+      - type: text_box
+        left: 7
+        top: 2.8
+        width: 5
+        height: 2.5
+        text: "• Often uses Small String Optimization (SSO)\n• Small strings (<15 chars) stored directly in object\n• Larger strings stored in dynamically allocated memory\n• Tracks both size and capacity"
+        font: "Segoe UI"
+        size: 18
+        color: "{{text_color}}"
+
+      # String Object Container
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 8
+        top: 5
+        width: 2.5
+        height: 1.2
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 2
+
+      # String Object Label
+      - type: text_box
+        left: 8.1
+        top: 5.1
+        width: 2.3
+        height: 0.3
+        text: "String Object"
+        font: "Segoe UI"
+        size: 12
+        bold: true
+        color: "{{std_string_color}}"
+
+      # String Object Memory Cells (6 small cells for "Hello\0")
+      - type: shape
+        shape_type: rectangle
+        left: 8.1
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "H"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 12
+
+      - type: shape
+        shape_type: rectangle
+        left: 8.45
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "e"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 12
+
+      - type: shape
+        shape_type: rectangle
+        left: 8.8
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 12
+
+      - type: shape
+        shape_type: rectangle
+        left: 9.15
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 12
+
+      - type: shape
+        shape_type: rectangle
+        left: 9.5
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "o"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 12
+
+      - type: shape
+        shape_type: rectangle
+        left: 9.85
+        top: 5.5
+        width: 0.3
+        height: 0.3
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 0.75
+        text: "\\0"
+        text_color: "{{null_terminator_color}}"
+        font: "Consolas"
+        size: 12
+
+      # Bottom Quote
+      - type: text_box
+        left: 1
+        top: 8.3
+        width: 10
+        height: 0.6
+        text: "_Small String Optimization is like keeping a small shopping list in your pocket vs. having to go home to get your big shopping list from the fridge._"
+        font: "Segoe UI"
+        size: 16
+        italic: true
+        color: "{{text_color}}"
+
+  # SLIDE 4: OPERATIONS & COMPLEXITY TABLE
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Section Header
+      - type: text_box
+        left: 1
+        top: 0.8
+        width: 10
+        height: 1
+        text: "String Operations & Complexity"
+        font: "Segoe UI Light"
+        size: 40
+        bold: true
+        color: "{{title_gradient_start}}"
+
+      # Table Header Background
+      - type: shape
+        shape_type: rectangle
+        left: 0.5
+        top: 2
+        width: 12
+        height: 0.7
+        fill_color: [61, 61, 61] # Dark Gray (#3D3D3D)
+        line_color: [61, 61, 61]
+
+      # Table Header - Operation Column
+      - type: text_box
+        left: 0.6
+        top: 2.1
+        width: 4
+        height: 0.5
+        text: "Operation"
+        font: "Segoe UI"
+        size: 20
+        bold: true
+        color: [255, 255, 255] # White
+
+      # Table Header - C-style Column
+      - type: text_box
+        left: 4.6
+        top: 2.1
+        width: 4
+        height: 0.5
+        text: "C-style"
+        font: "Segoe UI"
+        size: 20
+        bold: true
+        color: "{{c_style_color}}"
+
+      # Table Header - std::string Column
+      - type: text_box
+        left: 8.6
+        top: 2.1
+        width: 4
+        height: 0.5
+        text: "std::string"
+        font: "Segoe UI"
+        size: 20
+        bold: true
+        color: "{{std_string_color}}"
+
+      # Table Content - using a single element with markdown-style table
+      - type: text_box
+        left: 0.5
+        top: 2.7
+        width: 12
+        height: 5
+        text: |
+          | Operation     | C-style                | std::string          | Notes                        |
+          |---------------|------------------------|----------------------|------------------------------|
+          | Create        | O(n)                   | O(n)                 | Both copy characters         |
+          | Length        | O(n)                   | O(1)                 | std::string tracks size      |
+          | Concatenate   | O(n+m)                 | O(n+m)               | Both need to copy characters |
+          | Compare       | O(n)                   | O(n)                 | Character-by-character       |
+          | Access        | O(1)                   | O(1)                 | Direct array access          |
+          | Find          | O(n*m)                 | O(n*m)               | Linear search                |
+          | Insert        | O(n) + Manual resizing | O(n)                 | std::string handles resizing |
+          | Erase         | O(n) + Manual shifting | O(n)                 | std::string handles shifting |
+        font: "Consolas"
+        size: 16
+        color: "{{text_color}}"
+
+      # Bottom Quote
+      - type: text_box
+        left: 0.5
+        top: 8.3
+        width: 12
+        height: 0.7
+        text: "_A programmer's evolution: First you love strings, then you hate them, then you understand them, and finally you accept that they'll always be a source of bugs regardless._"
+        font: "Segoe UI"
+        size: 16
+        italic: true
+        color: "{{text_color}}"
+
+  # SLIDE 5: STRING MANIPULATION TECHNIQUES
+  - type: blank
+    background:
+      color: "{{bg_color}}"
+    elements:
+      # Section Header
+      - type: text_box
+        left: 1
+        top: 0.8
+        width: 10
+        height: 1
+        text: "String Manipulation Techniques"
+        font: "Segoe UI Light"
+        size: 40
+        bold: true
+        color: "{{title_gradient_start}}"
+
+      # String Traversal Subheading
+      - type: text_box
+        left: 1
+        top: 2
+        width: 12
+        height: 0.7
+        text: "1. String Traversal"
+        font: "Segoe UI"
+        size: 28
+        bold: true
+        color: "{{code_color}}"
+
+      # Left section container (C-style)
+      - type: shape
+        shape_type: rectangle
+        left: 1
+        top: 2.8
+        width: 5.5
+        height: 2.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{c_style_color}}"
+        line_width: 1
+
+      # Left section heading
+      - type: text_box
+        left: 1.2
+        top: 3
+        width: 5
+        height: 0.5
+        text: "For C-style strings:"
+        font: "Segoe UI"
+        size: 18
+        bold: true
+        color: "{{c_style_color}}"
+
+      # Left section code block
+      - type: code
+        left: 1.2
+        top: 3.4
+        width: 5
+        height: 1.8
+        code: |
+          char str[] = "Hello";
+          for (int i = 0; str[i] != '\0'; i++) {
+              char c = str[i];
+              // Process character c
+          }
+        font: "Consolas"
+        size: 14
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{very_dark_gray}}"
+
+      # Right section container (std::string)
+      - type: shape
+        shape_type: rectangle
+        left: 7
+        top: 2.8
+        width: 5.5
+        height: 2.5
+        fill_color: "{{dark_gray}}"
+        line_color: "{{std_string_color}}"
+        line_width: 1
+
+      # Right section heading
+      - type: text_box
+        left: 7.2
+        top: 3
+        width: 5
+        height: 0.5
+        text: "For std::string:"
+        font: "Segoe UI"
+        size: 18
+        bold: true
+        color: "{{std_string_color}}"
+
+      # Right section code block
+      - type: code
+        left: 7.2
+        top: 3.4
+        width: 5
+        height: 1.8
+        code: |
+          std::string str = "Hello";
+          for (char c : str) {
+              // Process character c
+          }
+        font: "Consolas"
+        size: 14
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{very_dark_gray}}"
+
+      # Character visualization blocks
+      # H Block
+      - type: shape
+        shape_type: rectangle
+        left: 4.5
+        top: 5.5
+        width: 0.7
+        height: 0.7
+        fill_color: "{{dark_gray}}"
+        line_color: "{{code_color}}"
+        line_width: 1.5
+        text: "H"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 24
+        bold: true
+
+      # e Block
+      - type: shape
+        shape_type: rectangle
+        left: 5.3
+        top: 5.5
+        width: 0.7
+        height: 0.7
+        fill_color: "{{dark_gray}}"
+        line_color: "{{code_color}}"
+        line_width: 1.5
+        text: "e"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 24
+        bold: true
+
+      # l Block
+      - type: shape
+        shape_type: rectangle
+        left: 6.1
+        top: 5.5
+        width: 0.7
+        height: 0.7
+        fill_color: "{{dark_gray}}"
+        line_color: "{{code_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 24
+        bold: true
+
+      # l Block
+      - type: shape
+        shape_type: rectangle
+        left: 6.9
+        top: 5.5
+        width: 0.7
+        height: 0.7
+        fill_color: "{{dark_gray}}"
+        line_color: "{{code_color}}"
+        line_width: 1.5
+        text: "l"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 24
+        bold: true
+
+      # o Block
+      - type: shape
+        shape_type: rectangle
+        left: 7.7
+        top: 5.5
+        width: 0.7
+        height: 0.7
+        fill_color: "{{dark_gray}}"
+        line_color: "{{code_color}}"
+        line_width: 1.5
+        text: "o"
+        text_color: "{{cell_text_color}}"
+        font: "Consolas"
+        size: 24
+        bold: true
+
+      # Traversal pointer
+      - type: shape
+        shape_type: up_arrow
+        left: 4.65
+        top: 6.3
+        width: 0.4
+        height: 0.3
+        fill_color: "{{code_color}}"
+        line_color: "{{code_color}}"
+        line_width: 1
+
+      # String Transformation Subheading
+      - type: text_box
+        left: 1
+        top: 6.3
+        width: 12
+        height: 0.7
+        text: "2. String Transformation"
+        font: "Segoe UI"
+        size: 28
+        bold: true
+        color: "{{code_color}}"
+
+      # Left Transformation Example (Case Conversion)
+      - type: code
+        left: 1
+        top: 7
+        width: 5.5
+        height: 1.5
+        code: |
+          std::string str = "Hello";
+          std::transform(str.begin(), str.end(), 
+                       str.begin(), ::toupper);
+          // Result: "HELLO"
+        font: "Consolas"
+        size: 14
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{dark_gray}}"
+
+      # Right Transformation Example (Substring)
+      - type: code
+        left: 7
+        top: 7
+        width: 5.5
+        height: 1.5
+        code: |
+          std::string str = "Hello World";
+          std::string sub = str.substr(6, 5);
+          // Result: "World"
+        font: "Consolas"
+        size: 14
+        color: "{{code_color}}"
+        background: true
+        background_color: "{{dark_gray}}"

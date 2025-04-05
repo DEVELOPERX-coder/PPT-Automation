@@ -3,7 +3,7 @@
 PowerPoint Presentation Generator
 
 This script automates the creation of PowerPoint presentations from
-custom-formatted input files.
+YAML configuration files with comprehensive customization options.
 """
 
 import os
@@ -13,9 +13,8 @@ import logging
 from datetime import datetime
 
 # Import project modules
-from src.ppt_generator import PPTGenerator
-from src.template_parser import TemplateParser
-from src import utils
+from src.ppt_generator import PresentationGenerator
+from src.validators import validate_yaml_file
 
 # Configure logging
 logging.basicConfig(
@@ -32,12 +31,12 @@ def parse_args():
         argparse.Namespace: Parsed arguments.
     """
     parser = argparse.ArgumentParser(
-        description='Generate PowerPoint presentations from custom-formatted input files.'
+        description='Generate PowerPoint presentations from YAML configuration files.'
     )
     
     parser.add_argument(
         'input_file',
-        help='Path to the input file (YAML, JSON, or TXT format)'
+        help='Path to the input YAML file'
     )
     
     parser.add_argument(
@@ -48,6 +47,12 @@ def parse_args():
     parser.add_argument(
         '-t', '--template',
         help='Path to a PowerPoint template file to use as a base'
+    )
+    
+    parser.add_argument(
+        '--validate-only',
+        action='store_true',
+        help='Only validate the YAML file without generating the presentation'
     )
     
     parser.add_argument(
@@ -83,16 +88,27 @@ def main():
     # Ensure output directory exists
     output_dir = os.path.dirname(args.output)
     if output_dir and not os.path.exists(output_dir):
-        utils.ensure_directory_exists(output_dir)
+        os.makedirs(output_dir)
+        logger.debug(f"Created output directory: {output_dir}")
     
     try:
-        # Parse the input file
-        logger.info(f"Parsing input file: {args.input_file}")
-        parser = TemplateParser()
-        presentation_data = parser.parse_file(args.input_file)
+        # Validate the YAML file
+        logger.info(f"Validating YAML file: {args.input_file}")
+        validation_result = validate_yaml_file(args.input_file)
+        
+        if not validation_result['valid']:
+            logger.error(f"YAML validation failed: {validation_result['errors']}")
+            sys.exit(1)
+        
+        logger.info("YAML validation successful")
+        
+        # If only validation is requested, exit successfully
+        if args.validate_only:
+            logger.info("Validation complete. Exiting as requested.")
+            return 0
         
         # Create PowerPoint generator with optional template
-        generator = PPTGenerator(template_path=args.template)
+        generator = PresentationGenerator(template_path=args.template)
         
         # Generate the presentation
         logger.info(f"Generating PowerPoint presentation: {args.output}")
@@ -106,7 +122,7 @@ def main():
             return 1
             
     except Exception as e:
-        logger.exception(f"Error generating presentation: {e}")
+        logger.exception(f"Error during presentation generation: {e}")
         return 1
 
 if __name__ == "__main__":

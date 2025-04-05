@@ -1,3 +1,4 @@
 python-pptx>=0.6.21
 PyYAML>=6.0
-Pillow>=9.0.0
+jsonschema>=4.17.3
+Pillow>=9.4.0

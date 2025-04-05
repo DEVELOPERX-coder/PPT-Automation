@@ -1,24 +1,32 @@
 # PowerPoint Automation Project
 
-A Python-based tool for automating the creation of PowerPoint presentations from custom-formatted input files.
+A comprehensive Python project for automating the creation of PowerPoint presentations using YAML configuration files. This tool allows you to dynamically generate professionally formatted presentations with full customization of shapes, text, colors, layouts, and other PowerPoint elements.
 
-## Features
+## 🌟 Features
 
-- Convert YAML, JSON, or simple text files into professional PowerPoint presentations
-- Support for various slide types (title, content, two-column, section headers, etc.)
-- Variable substitution for dynamic content
-- Custom styling and theming
-- Image and shape support
-- Command-line interface for easy integration into workflows
+- **Flexible YAML Configuration**: Define entire presentations with a structured, easy-to-read YAML format
+- **Dynamic Templating**: Use variables throughout your presentation for consistent branding and easy updates
+- **Rich Element Support**: Create and customize:
+  - Various slide layouts (title slides, content slides, section headers, etc.)
+  - Shapes with customizable properties (rectangles, ovals, arrows, etc.)
+  - Text boxes with rich formatting options
+  - Tables and charts for data visualization
+  - Code blocks with syntax highlighting
+  - Images with automatic sizing and positioning
+- **Comprehensive Styling**: Control fonts, colors, alignment, and other visual properties
+- **Input Validation**: Robust error checking to ensure your YAML configuration is valid
+- **Template-based Design**: Start with pre-built templates for common presentation types
 
-## Installation
-
-### Prerequisites
+## 📋 Requirements
 
 - Python 3.7 or higher
-- pip (Python package installer)
+- Required Python packages (see `requirements.txt`):
+  - python-pptx
+  - PyYAML
+  - jsonschema
+  - Pillow (for image processing)
 
-### Setup
+## 🚀 Installation
 
 1. Clone this repository:
 
@@ -27,63 +35,110 @@ A Python-based tool for automating the creation of PowerPoint presentations from
    cd ppt-automator
    ```
 
-2. Install the required dependencies:
+2. Create and activate a virtual environment (recommended):
+
+   ```bash
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
+
+   # macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. Install required packages:
    ```bash
    pip install -r requirements.txt
    ```
 
-## Usage
+## 🛠️ Usage
 
 ### Basic Usage
 
-Generate a PowerPoint presentation from an input file:
+Generate a PowerPoint presentation from a YAML file:
 
 ```bash
-python main.py path/to/input_file.yaml
+python main.py examples/basic_presentation.yaml
 ```
 
 ### Advanced Options
 
 ```bash
-python main.py path/to/input_file.yaml -o output.pptx -t template.pptx -v
+python main.py examples/business_report.yaml -o my_report.pptx -t template.pptx -v
 ```
 
 Options:
 
 - `-o, --output`: Specify the output PowerPoint file path
 - `-t, --template`: Use a PowerPoint template file as a base
+- `--validate-only`: Only validate the YAML file without generating a presentation
 - `-v, --verbose`: Enable verbose logging
 
-## Input File Format
+### Creating Your Own Presentations
 
-The tool supports three input formats: YAML, JSON, and simple text. YAML is the recommended format for its readability and structure.
+1. Start by examining the example YAML files in the `examples/` directory
+2. Copy and modify one of the examples to fit your needs
+3. Check the [YAML Reference](docs/yaml_reference.md) for detailed information about available options
+4. Validate your YAML file: `python main.py your_file.yaml --validate-only`
+5. Generate your presentation: `python main.py your_file.yaml -o your_presentation.pptx`
 
-### YAML Format
+## 🏗️ Project Structure
+
+```
+ppt-automator/
+├── src/                      # Source code
+│   ├── ppt_generator.py      # Core PowerPoint generation functionality
+│   ├── slide_builder.py      # Slide creation and configuration
+│   ├── element_factory.py    # Individual element creation
+│   ├── validators.py         # YAML validation
+│   └── utils.py              # Utility functions
+├── examples/                 # Example YAML files
+│   ├── basic_presentation.yaml
+│   ├── business_report.yaml
+│   └── educational_slides.yaml
+├── docs/                     # Documentation
+│   ├── yaml_reference.md     # Detailed YAML format documentation
+│   ├── element_types.md      # Information about supported elements
+│   └── troubleshooting.md    # Common issues and solutions
+├── main.py                   # Command-line interface
+├── requirements.txt          # Project dependencies
+└── README.md                 # This file
+```
+
+## 📝 YAML Structure
+
+Your YAML file should have the following structure:
 
 ```yaml
-# Define variables that can be referenced throughout the document
+# Variables for use throughout the presentation
 variables:
   company_name: "Acme Corporation"
-  presenter: "John Smith"
-  date: "April 5, 2025"
+  primary_color: [0, 112, 192] # RGB values
 
 # Presentation-wide settings
 settings:
-  style:
-    title_font: "Calibri"
-    title_size: 44
-    body_font: "Calibri"
-    body_size: 18
-    theme_color: [41, 105, 176] # RGB values for primary color
+  theme:
+    fonts:
+      title:
+        name: "Calibri"
+        size: 44
+      # More font settings...
+    colors:
+      background: "#FFFFFF"
+      # More color settings...
+  properties:
+    title: "Presentation Title"
+    # More properties...
 
 # Slides definition
 slides:
   # Title slide
-  - type: title_slide
-    title: "{{company_name}} Quarterly Report"
-    subtitle: "Presented by {{presenter}} | {{date}}"
+  - type: title
+    title: "{{company_name}} Presentation"
+    subtitle: "Created with PowerPoint Automator"
 
-  # Content slide with bullets
+  # Content slide
   - type: title_and_content
     title: "Agenda"
     content:
@@ -91,139 +146,72 @@ slides:
       - "Item 2"
       - "Item 3"
 
-  # Slide with an image
-  - type: title_and_content
-    title: "Product Highlights"
-    content: "This is our flagship product."
-    image:
-      path: "path/to/image.png"
-      left: 5
-      top: 2.5
-      width: 4
-      height: 3
+  # Custom slide with elements
+  - type: blank
+    elements:
+      - type: text_box
+        left: 1
+        top: 1
+        width: 8
+        height: 1
+        text: "Custom Text"
+        # More text formatting options...
+
+      - type: shape
+        shape_type: rectangle
+        left: 2
+        top: 3
+        width: 4
+        height: 2
+        fill_color: "{{primary_color}}"
+        # More shape options...
 ```
 
-### Text Format
+For complete documentation of all available options, see [YAML Reference](docs/yaml_reference.md).
 
-Simple text format is also supported:
+## 🎨 Customization Options
 
-```
-# Main Presentation Title
-* Presented by John Smith
+### Slide Types
 
----
+- `title`: Title slide with title and subtitle
+- `title_and_content`: Standard slide with title and content
+- `section`: Section header slide
+- `two_content`: Slide with two columns of content
+- `title_only`: Slide with only a title
+- `blank`: Empty slide for custom elements
 
-## Agenda
+### Element Types
 
-- Item 1
-- Item 2
-- Item 3
+- `text_box`: Formatted text
+- `shape`: Various shapes with optional text
+- `image`: Pictures from local files
+- `table`: Tabular data with formatting
+- `chart`: Data visualizations
+- `code`: Formatted code blocks
 
----
+For full details on element options, see [Element Types](docs/element_types.md).
 
-## Product Highlights
+## 📊 Example Use Cases
 
-This is our flagship product.
+- **Business Reports**: Quarterly/annual reports, financial presentations
+- **Educational Content**: Course slides, tutorials, workshops
+- **Marketing Materials**: Product presentations, pitch decks
+- **Technical Documentation**: Architecture diagrams, process flows
+- **Event Programs**: Conference agendas, event schedules
 
-!image: path/to/image.jpg
-```
+## 🔧 Troubleshooting
 
-## Supported Slide Types
+If you encounter issues:
 
-| Type                | Description                          |
-| ------------------- | ------------------------------------ |
-| `title_slide`       | Title slide with optional subtitle   |
-| `title_and_content` | Title with content (text or bullets) |
-| `section`           | Section header slide                 |
-| `two_content`       | Slide with two columns of content    |
-| `title_only`        | Slide with title and custom elements |
-| `blank`             | Blank slide with custom elements     |
+1. Check your YAML syntax with `--validate-only`
+2. Ensure all referenced files (images, templates) exist and are accessible
+3. Review the logs with `-v` for detailed error information
+4. Consult the [Troubleshooting Guide](docs/troubleshooting.md)
 
-## Variables
-
-You can define variables at the top of your input file and reference them throughout using the `{{variable_name}}` syntax. This is useful for:
-
-- Company names, presenter information, dates
-- Repeated values or data points
-- Ensuring consistency across the presentation
-
-## Custom Elements
-
-For `title_only` and `blank` slide types, you can add custom elements:
-
-```yaml
-elements:
-  - type: text_box
-    left: 1
-    top: 2
-    width: 8
-    height: 1
-    text: "Custom text box"
-    font: "Calibri"
-    size: 20
-
-  - type: shape
-    shape_type: star
-    left: 5
-    top: 3
-    width: 2
-    height: 2
-    fill_color: [255, 215, 0] # Gold
-    text: "93%"
-```
-
-## Formatting Guidelines
-
-### Position and Size
-
-All position and size values are specified in inches:
-
-- `left`: Distance from the left edge of the slide
-- `top`: Distance from the top edge of the slide
-- `width`: Width of the element
-- `height`: Height of the element
-
-### Colors
-
-Colors can be specified in several formats:
-
-- RGB array: `[255, 0, 0]` (red)
-- Hex: `"#FF0000"` (red)
-- Named color: `"red"`
-
-## Examples
-
-Check the `examples/` directory for sample input files and their corresponding PowerPoint outputs.
-
-## Best Practices
-
-1. **Start with a template**: Create a YAML file based on the examples provided in the `examples/` directory.
-
-2. **Use variables**: Define variables for any repeated content to ensure consistency.
-
-3. **Organize with sections**: Use section slides to create a clear structure in your presentation.
-
-4. **Test incrementally**: Start with a few slides and add more as you verify the output.
-
-5. **Custom styling**: Define presentation-wide styling in the `settings` section.
-
-## Troubleshooting
-
-### Common Issues
-
-- **Images not appearing**: Ensure image paths are correct and accessible.
-- **Variable not replacing**: Check for typos in variable names. Variable references are case-sensitive.
-- **Slide layout issues**: Verify positioning values (left, top, width, height) are appropriate.
-
-### Error Messages
-
-- "Image not found": Check that the image file exists at the specified path.
-- "Error parsing YAML file": Validate your YAML syntax using an online YAML validator.
-
-## Contributing
+## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.

@@ -1,0 +1,259 @@
+# Basic PowerPoint Presentation Example
+
+# Define variables that can be used throughout the YAML with {{variable_name}}
+variables:
+  company_name: "Acme Corporation"
+  presenter: "John Smith"
+  presentation_date: "April 5, 2025"
+  primary_color: [0, 112, 192] # Blue
+  secondary_color: [255, 192, 0] # Orange
+  dark_bg: [44, 44, 44] # Dark gray
+
+# Presentation-wide settings
+settings:
+  theme:
+    fonts:
+      title:
+        name: "Montserrat"
+        size: 44
+      subtitle:
+        name: "Montserrat"
+        size: 32
+      body:
+        name: "Roboto"
+        size: 18
+    colors:
+      background: "#FFFFFF" # White
+      title: [0, 112, 192] # Blue
+      text: [64, 64, 64] # Dark gray
+      accent: [255, 192, 0] # Orange
+
+  properties:
+    title: "Basic PowerPoint Presentation"
+    author: "{{presenter}}"
+    subject: "Demonstration"
+    keywords: "presentation, demo, automation"
+    category: "Examples"
+
+# Slides definition
+slides:
+  # Title slide
+  - type: title
+    title: "{{company_name}} Quarterly Report"
+    subtitle: "Presented by {{presenter}}\n{{presentation_date}}"
+    background:
+      color: "{{dark_bg}}"
+
+  # Agenda slide
+  - type: title_and_content
+    title: "Agenda"
+    content:
+      - "Company Overview"
+      - "Q1 Financial Results"
+      - "Key Achievements"
+      - "Challenges and Opportunities"
+      - "Goals for Q2"
+
+  # Section header slide
+  - type: section
+    title: "Company Overview"
+    background:
+      color: "{{dark_bg}}"
+
+  # Company overview slide with two columns
+  - type: two_content
+    title: "About {{company_name}}"
+    left_content:
+      - "Founded in 2010"
+      - "Headquarters in Silicon Valley"
+      - "500+ employees worldwide"
+      - "Industry leader in innovation"
+    right_content:
+      type: image
+      path: "examples/images/company_logo.png"
+
+  # Section header slide
+  - type: section
+    title: "Q1 Financial Results"
+    background:
+      color: "{{dark_bg}}"
+
+  # Financial results slide with a chart
+  - type: title_and_content
+    title: "Q1 Financial Highlights"
+    content:
+      type: chart
+      chart_type: column
+      title: "Revenue vs Expenses Q1 2025"
+      data:
+        categories: ["January", "February", "March"]
+        series:
+          - name: "Revenue"
+            values: [4.2, 4.8, 5.5]
+          - name: "Expenses"
+            values: [3.1, 3.2, 3.4]
+
+  # Detailed financial table
+  - type: title_and_content
+    title: "Detailed Financial Breakdown"
+    content:
+      type: table
+      has_header: true
+      data:
+        - ["Category", "Q1 2024", "Q1 2025", "Change"]
+        - ["Revenue", "$4.2M", "$5.5M", "+30.9%"]
+        - ["Expenses", "$3.1M", "$3.4M", "+9.7%"]
+        - ["Profit", "$1.1M", "$2.1M", "+90.9%"]
+        - ["Margin", "26.2%", "38.2%", "+12.0%"]
+      style:
+        zebra_striping: true
+
+  # Section header slide
+  - type: section
+    title: "Key Achievements"
+    background:
+      color: "{{dark_bg}}"
+
+  # Custom slide with elements
+  - type: blank
+    elements:
+      - type: text_box
+        left: 1
+        top: 1
+        width: 10
+        height: 1
+        text: "Q1 2025 Key Achievements"
+        font: "Montserrat"
+        size: 36
+        color: "{{primary_color}}"
+        bold: true
+
+      # Achievement 1
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 1
+        top: 2.5
+        width: 3
+        height: 2.5
+        fill_color: "{{primary_color}}"
+        text: "New Product Launch\nAcme Pro XL"
+        text_color: "#FFFFFF"
+        font: "Roboto"
+        size: 18
+        bold: true
+        align: center
+
+      # Achievement 2
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 4.5
+        top: 2.5
+        width: 3
+        height: 2.5
+        fill_color: "{{primary_color}}"
+        text: "Global Expansion\nOpened 3 New Offices"
+        text_color: "#FFFFFF"
+        font: "Roboto"
+        size: 18
+        bold: true
+        align: center
+
+      # Achievement 3
+      - type: shape
+        shape_type: rounded_rectangle
+        left: 8
+        top: 2.5
+        width: 3
+        height: 2.5
+        fill_color: "{{primary_color}}"
+        text: "Customer Growth\n+25% New Customers"
+        text_color: "#FFFFFF"
+        font: "Roboto"
+        size: 18
+        bold: true
+        align: center
+
+  # Section header slide
+  - type: section
+    title: "Challenges and Opportunities"
+    background:
+      color: "{{dark_bg}}"
+
+  # Two column slide for challenges and opportunities
+  - type: two_content
+    title: "Looking Forward"
+    left_content:
+      - type: text_box
+        text: "Challenges"
+        font: "Montserrat"
+        size: 24
+        color: "{{primary_color}}"
+        bold: true
+      - type: text_box
+        text: "• Supply chain disruptions\n• Increasing competition\n• Talent acquisition\n• Regulatory changes"
+        font: "Roboto"
+        size: 18
+    right_content:
+      - type: text_box
+        text: "Opportunities"
+        font: "Montserrat"
+        size: 24
+        color: "{{secondary_color}}"
+        bold: true
+      - type: text_box
+        text: "• Emerging markets\n• Strategic partnerships\n• Product innovation\n• Digital transformation"
+        font: "Roboto"
+        size: 18
+
+  # Section header slide
+  - type: section
+    title: "Goals for Q2"
+    background:
+      color: "{{dark_bg}}"
+
+  # Slide with code example
+  - type: title_and_content
+    title: "Technology Roadmap"
+    content:
+      type: code
+      code: |
+        // Q2 Development Roadmap
+        function implementQ2Features() {
+          const features = [
+            "AI-powered analytics",
+            "Mobile app redesign",
+            "Cloud infrastructure migration",
+            "API performance optimization"
+          ];
+          
+          const timeline = {
+            April: ["Planning", "Resource allocation"],
+            May: ["Development sprints", "Alpha testing"],
+            June: ["Beta release", "Customer feedback"]
+          };
+          
+          return { features, timeline };
+        }
+      font: "Consolas"
+      size: 14
+      color: [0, 230, 0]
+      background: true
+      background_color: "#202020"
+
+  # Thank you slide
+  - type: title
+    title: "Thank You!"
+    subtitle: "Questions?"
+    background:
+      color: "{{dark_bg}}"
+    elements:
+      - type: text_box
+        left: 1
+        top: 6
+        width: 10
+        height: 0.5
+        text: "Contact: {{presenter}} | john.smith@acme.com"
+        font: "Roboto"
+        size: 14
+        color: "#FFFFFF"
+        align: center

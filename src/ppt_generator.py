@@ -2,48 +2,62 @@
 PowerPoint Presentation Generator
 
 This module contains the core functionality for generating PowerPoint presentations
-from custom-formatted input files.
+from YAML configuration files.
 """
 
 import os
+import logging
 import yaml
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
 from pptx.dml.color import RGBColor
+from pptx.enum.text import PP_ALIGN
 
-class PPTGenerator:
+from src.slide_builder import SlideBuilder
+from src.utils import apply_theme_settings, resolve_variables
+
+logger = logging.getLogger(__name__)
+
+class PresentationGenerator:
     """
-    A class for generating PowerPoint presentations from custom input files.
+    A class for generating PowerPoint presentations from YAML configuration files.
     """
     
     def __init__(self, template_path=None):
         """
-        Initialize the PPTGenerator with an optional template.
+        Initialize the PresentationGenerator with an optional template.
         
         Args:
             template_path (str, optional): Path to a PowerPoint template file.
         """
         if template_path and os.path.exists(template_path):
             self.prs = Presentation(template_path)
+            logger.debug(f"Using template: {template_path}")
         else:
             self.prs = Presentation()
+            logger.debug("Using blank presentation")
         
-        # Default styling
-        self.default_style = {
+        self.slide_builder = SlideBuilder(self.prs)
+        self.variables = {}
+        self.theme_settings = {
             'title_font': 'Calibri',
-            'title_size': 44,
+            'title_font_size': 44,
+            'subtitle_font': 'Calibri',
+            'subtitle_font_size': 32,
             'body_font': 'Calibri',
-            'body_size': 18,
-            'theme_color': RGBColor(0, 112, 192)  # Blue
+            'body_font_size': 18,
+            'background_color': (255, 255, 255),  # White
+            'title_color': (0, 0, 0),  # Black
+            'text_color': (0, 0, 0),  # Black
+            'accent_color': (0, 112, 192)  # Blue
         }
     
     def generate_from_file(self, input_file_path, output_path):
         """
-        Generate a PowerPoint presentation from a custom input file.
+        Generate a PowerPoint presentation from a YAML configuration file.
         
         Args:
-            input_file_path (str): Path to the input file.
+            input_file_path (str): Path to the input YAML file.
             output_path (str): Path where the PowerPoint file should be saved.
             
         Returns:
@@ -52,21 +66,42 @@ class PPTGenerator:
         try:
             # Read and parse the input file
             with open(input_file_path, 'r', encoding='utf-8') as f:
-                content = yaml.safe_load(f)
+                config = yaml.safe_load(f)
             
+            # Process variables
+            if 'variables' in config:
+                self.variables = config['variables']
+                logger.debug(f"Loaded {len(self.variables)} variables")
+                
             # Apply presentation-wide settings
-            self._apply_presentation_settings(content.get('settings', {}))
+            if 'settings' in config:
+                self._apply_presentation_settings(config['settings'])
             
             # Process slides
-            for slide_data in content.get('slides', []):
-                self._create_slide(slide_data)
+            slides_data = config.get('slides', [])
+            for slide_idx, slide_data in enumerate(slides_data):
+                logger.debug(f"Processing slide {slide_idx + 1}/{len(slides_data)}")
+                
+                # Resolve variables in the slide data
+                slide_data = resolve_variables(slide_data, self.variables)
+                
+                # Create the slide
+                self.slide_builder.create_slide(slide_data, self.theme_settings)
+            
+            # Apply presentation-wide theme
+            apply_theme_settings(self.prs, self.theme_settings)
+            
+            # Apply transitions if specified
+            if 'transitions' in config:
+                self._apply_transitions(config['transitions'])
             
             # Save the presentation
             self.prs.save(output_path)
+            logger.info(f"Presentation saved to {output_path}")
             return True
             
         except Exception as e:
-            print(f"Error generating presentation: {e}")
+            logger.exception(f"Error generating presentation: {e}")
             return False
     
     def _apply_presentation_settings(self, settings):
@@ -76,379 +111,115 @@ class PPTGenerator:
         Args:
             settings (dict): Dictionary of presentation settings.
         """
-        # Apply custom styling if provided
-        if 'style' in settings:
-            style = settings['style']
-            if 'title_font' in style:
-                self.default_style['title_font'] = style['title_font']
-            if 'title_size' in style:
-                self.default_style['title_size'] = style['title_size']
-            if 'body_font' in style:
-                self.default_style['body_font'] = style['body_font']
-            if 'body_size' in style:
-                self.default_style['body_size'] = style['body_size']
-            if 'theme_color' in style:
-                color = style['theme_color']
-                if isinstance(color, list) and len(color) == 3:
-                    self.default_style['theme_color'] = RGBColor(*color)
+        logger.debug("Applying presentation settings")
+        
+        # Apply theme settings
+        if 'theme' in settings:
+            theme = settings['theme']
+            
+            # Font settings
+            if 'fonts' in theme:
+                fonts = theme['fonts']
+                if 'title' in fonts:
+                    self.theme_settings['title_font'] = fonts['title'].get('name', 'Calibri')
+                    self.theme_settings['title_font_size'] = fonts['title'].get('size', 44)
+                
+                if 'subtitle' in fonts:
+                    self.theme_settings['subtitle_font'] = fonts['subtitle'].get('name', 'Calibri')
+                    self.theme_settings['subtitle_font_size'] = fonts['subtitle'].get('size', 32)
+                
+                if 'body' in fonts:
+                    self.theme_settings['body_font'] = fonts['body'].get('name', 'Calibri')
+                    self.theme_settings['body_font_size'] = fonts['body'].get('size', 18)
+            
+            # Color settings
+            if 'colors' in theme:
+                colors = theme['colors']
+                
+                if 'background' in colors:
+                    self.theme_settings['background_color'] = self._parse_color(colors['background'])
+                
+                if 'title' in colors:
+                    self.theme_settings['title_color'] = self._parse_color(colors['title'])
+                
+                if 'text' in colors:
+                    self.theme_settings['text_color'] = self._parse_color(colors['text'])
+                
+                if 'accent' in colors:
+                    self.theme_settings['accent_color'] = self._parse_color(colors['accent'])
+        
+        # Apply any other presentation settings
+        if 'properties' in settings:
+            props = settings['properties']
+            
+            if 'title' in props:
+                self.prs.core_properties.title = props['title']
+            
+            if 'author' in props:
+                self.prs.core_properties.author = props['author']
+            
+            if 'subject' in props:
+                self.prs.core_properties.subject = props['subject']
+            
+            if 'keywords' in props:
+                self.prs.core_properties.keywords = props['keywords']
+            
+            if 'comments' in props:
+                self.prs.core_properties.comments = props['comments']
+            
+            if 'category' in props:
+                self.prs.core_properties.category = props['category']
     
-    def _create_slide(self, slide_data):
+    def _apply_transitions(self, transitions_config):
         """
-        Create a slide based on the provided data.
+        Apply slide transitions based on configuration.
         
         Args:
-            slide_data (dict): Dictionary containing slide data.
+            transitions_config (dict): Transition configuration.
         """
-        slide_type = slide_data.get('type', 'title_and_content')
-        
-        # Select the appropriate slide layout
-        layout = self._get_slide_layout(slide_type)
-        slide = self.prs.slides.add_slide(layout)
-        
-        # Process slide content based on type
-        if slide_type == 'title_slide':
-            self._create_title_slide(slide, slide_data)
-        elif slide_type == 'title_and_content':
-            self._create_title_content_slide(slide, slide_data)
-        elif slide_type == 'section':
-            self._create_section_slide(slide, slide_data)
-        elif slide_type == 'two_content':
-            self._create_two_content_slide(slide, slide_data)
-        elif slide_type == 'title_only':
-            self._create_title_only_slide(slide, slide_data)
-        elif slide_type == 'blank':
-            self._create_blank_slide(slide, slide_data)
-        else:
-            # Default to title and content
-            self._create_title_content_slide(slide, slide_data)
+        # Note: As of my knowledge cutoff, python-pptx doesn't fully support
+        # setting transitions programmatically. This is a placeholder for
+        # future implementation if the library adds support.
+        logger.warning("Slide transitions are not currently supported by python-pptx")
     
-    def _get_slide_layout(self, slide_type):
+    def _parse_color(self, color_value):
         """
-        Get the appropriate slide layout for the given slide type.
+        Parse a color value into an RGB tuple.
         
         Args:
-            slide_type (str): Type of slide to create.
+            color_value: Color value to parse, can be a string, list, or tuple.
             
         Returns:
-            SlideLayout: The slide layout to use.
+            tuple: RGB color values as (r, g, b) tuple.
         """
-        # Map slide types to indices in the slide layout collection
-        slide_layouts = {
-            'title_slide': 0,       # Title Slide
-            'title_and_content': 1, # Title and Content
-            'section': 2,           # Section Header
-            'two_content': 3,       # Two Content
-            'title_only': 5,        # Title Only
-            'blank': 6              # Blank
-        }
+        if isinstance(color_value, (list, tuple)) and len(color_value) == 3:
+            return tuple(color_value)
         
-        layout_idx = slide_layouts.get(slide_type, 1)  # Default to title and content
-        return self.prs.slide_layouts[layout_idx]
-    
-    def _create_title_slide(self, slide, slide_data):
-        """
-        Create a title slide with the given data.
-        
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        if 'title' in slide_data:
-            title = slide.shapes.title
-            title.text = slide_data['title']
-            self._apply_text_formatting(title.text_frame, 
-                                       font=self.default_style['title_font'],
-                                       size=self.default_style['title_size'])
-        
-        if 'subtitle' in slide_data and hasattr(slide.placeholders, '__iter__'):
-            for shape in slide.placeholders:
-                if shape.placeholder_format.type == 2:  # Subtitle placeholder
-                    shape.text = slide_data['subtitle']
-                    self._apply_text_formatting(shape.text_frame,
-                                              font=self.default_style['body_font'],
-                                              size=self.default_style['body_size'])
-                    break
-    
-    def _create_title_content_slide(self, slide, slide_data):
-        """
-        Create a title and content slide with the given data.
-        
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        if 'title' in slide_data:
-            title = slide.shapes.title
-            title.text = slide_data['title']
-            self._apply_text_formatting(title.text_frame, 
-                                       font=self.default_style['title_font'],
-                                       size=self.default_style['title_size'])
-        
-        if 'content' in slide_data:
-            content_placeholder = None
-            for shape in slide.placeholders:
-                if shape.placeholder_format.type == 7:  # Content placeholder
-                    content_placeholder = shape
-                    break
+        elif isinstance(color_value, str):
+            # Handle hex color
+            if color_value.startswith('#'):
+                hex_color = color_value.lstrip('#')
+                if len(hex_color) == 3:
+                    hex_color = ''.join([c+c for c in hex_color])
+                return tuple(int(hex_color[i:i+2], 16) for i in (0, 2, 4))
             
-            if content_placeholder:
-                if isinstance(slide_data['content'], list):
-                    # Create a bulleted list
-                    text_frame = content_placeholder.text_frame
-                    text_frame.clear()
-                    
-                    for i, item in enumerate(slide_data['content']):
-                        p = text_frame.add_paragraph()
-                        p.text = item
-                        p.level = 0  # Top level bullet
-                        self._apply_text_formatting(p, 
-                                                  font=self.default_style['body_font'],
-                                                  size=self.default_style['body_size'])
-                else:
-                    # Simple text content
-                    content_placeholder.text = slide_data['content']
-                    self._apply_text_formatting(content_placeholder.text_frame,
-                                              font=self.default_style['body_font'],
-                                              size=self.default_style['body_size'])
-        
-        # Process any images
-        if 'image' in slide_data:
-            self._add_image_to_slide(slide, slide_data['image'])
-    
-    def _create_section_slide(self, slide, slide_data):
-        """
-        Create a section header slide with the given data.
-        
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        if 'title' in slide_data:
-            title = slide.shapes.title
-            title.text = slide_data['title']
-            self._apply_text_formatting(title.text_frame, 
-                                       font=self.default_style['title_font'],
-                                       size=self.default_style['title_size'])
-    
-    def _create_two_content_slide(self, slide, slide_data):
-        """
-        Create a two content slide with the given data.
-        
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        if 'title' in slide_data:
-            title = slide.shapes.title
-            title.text = slide_data['title']
-            self._apply_text_formatting(title.text_frame, 
-                                       font=self.default_style['title_font'],
-                                       size=self.default_style['title_size'])
-        
-        # Find the content placeholders
-        left_placeholder = None
-        right_placeholder = None
-        
-        for shape in slide.placeholders:
-            if shape.placeholder_format.type == 7:  # Content placeholder
-                if left_placeholder is None:
-                    left_placeholder = shape
-                else:
-                    right_placeholder = shape
-                    break
-        
-        # Add left content
-        if left_placeholder and 'left_content' in slide_data:
-            if isinstance(slide_data['left_content'], list):
-                # Create a bulleted list
-                text_frame = left_placeholder.text_frame
-                text_frame.clear()
-                
-                for item in slide_data['left_content']:
-                    p = text_frame.add_paragraph()
-                    p.text = item
-                    p.level = 0  # Top level bullet
-                    self._apply_text_formatting(p, 
-                                              font=self.default_style['body_font'],
-                                              size=self.default_style['body_size'])
-            else:
-                # Simple text content
-                left_placeholder.text = slide_data['left_content']
-                self._apply_text_formatting(left_placeholder.text_frame,
-                                          font=self.default_style['body_font'],
-                                          size=self.default_style['body_size'])
-        
-        # Add right content
-        if right_placeholder and 'right_content' in slide_data:
-            if isinstance(slide_data['right_content'], list):
-                # Create a bulleted list
-                text_frame = right_placeholder.text_frame
-                text_frame.clear()
-                
-                for item in slide_data['right_content']:
-                    p = text_frame.add_paragraph()
-                    p.text = item
-                    p.level = 0  # Top level bullet
-                    self._apply_text_formatting(p, 
-                                              font=self.default_style['body_font'],
-                                              size=self.default_style['body_size'])
-            else:
-                # Simple text content
-                right_placeholder.text = slide_data['right_content']
-                self._apply_text_formatting(right_placeholder.text_frame,
-                                          font=self.default_style['body_font'],
-                                          size=self.default_style['body_size'])
-        
-        # Process any images
-        if 'left_image' in slide_data and left_placeholder:
-            self._add_image_to_placeholder(left_placeholder, slide_data['left_image'])
+            # Handle named colors
+            named_colors = {
+                'black': (0, 0, 0),
+                'white': (255, 255, 255),
+                'red': (255, 0, 0),
+                'green': (0, 128, 0),
+                'blue': (0, 0, 255),
+                'yellow': (255, 255, 0),
+                'purple': (128, 0, 128),
+                'orange': (255, 165, 0),
+                'gray': (128, 128, 128)
+            }
             
-        if 'right_image' in slide_data and right_placeholder:
-            self._add_image_to_placeholder(right_placeholder, slide_data['right_image'])
-    
-    def _create_title_only_slide(self, slide, slide_data):
-        """
-        Create a title only slide with the given data.
+            color_lower = color_value.lower()
+            if color_lower in named_colors:
+                return named_colors[color_lower]
         
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        if 'title' in slide_data:
-            title = slide.shapes.title
-            title.text = slide_data['title']
-            self._apply_text_formatting(title.text_frame, 
-                                       font=self.default_style['title_font'],
-                                       size=self.default_style['title_size'])
-        
-        # Process any custom elements
-        if 'elements' in slide_data:
-            for element in slide_data['elements']:
-                self._add_custom_element(slide, element)
-    
-    def _create_blank_slide(self, slide, slide_data):
-        """
-        Create a blank slide with the given data.
-        
-        Args:
-            slide (Slide): The slide to populate.
-            slide_data (dict): Data for the slide.
-        """
-        # Process any custom elements
-        if 'elements' in slide_data:
-            for element in slide_data['elements']:
-                self._add_custom_element(slide, element)
-    
-    def _add_custom_element(self, slide, element):
-        """
-        Add a custom element to the slide.
-        
-        Args:
-            slide (Slide): The slide to add the element to.
-            element (dict): Element data.
-        """
-        element_type = element.get('type', 'text_box')
-        
-        if element_type == 'text_box':
-            left = Inches(element.get('left', 1))
-            top = Inches(element.get('top', 1))
-            width = Inches(element.get('width', 4))
-            height = Inches(element.get('height', 1))
-            
-            textbox = slide.shapes.add_textbox(left, top, width, height)
-            textbox.text = element.get('text', '')
-            
-            font = element.get('font', self.default_style['body_font'])
-            size = element.get('size', self.default_style['body_size'])
-            self._apply_text_formatting(textbox.text_frame, font=font, size=size)
-        
-        elif element_type == 'image':
-            self._add_image_to_slide(slide, element)
-    
-    def _add_image_to_slide(self, slide, image_data):
-        """
-        Add an image to the slide.
-        
-        Args:
-            slide (Slide): The slide to add the image to.
-            image_data (dict): Image data.
-        """
-        image_path = image_data.get('path', '')
-        
-        if not os.path.exists(image_path):
-            print(f"Image not found: {image_path}")
-            return
-        
-        left = Inches(image_data.get('left', 1))
-        top = Inches(image_data.get('top', 1))
-        width = Inches(image_data.get('width', 4))
-        height = Inches(image_data.get('height', 3))
-        
-        slide.shapes.add_picture(image_path, left, top, width, height)
-    
-    def _add_image_to_placeholder(self, placeholder, image_data):
-        """
-        Add an image to a placeholder.
-        
-        Args:
-            placeholder (Shape): The placeholder to add the image to.
-            image_data (dict): Image data.
-        """
-        image_path = image_data.get('path', '')
-        
-        if not os.path.exists(image_path):
-            print(f"Image not found: {image_path}")
-            return
-        
-        # Clear any existing content
-        if hasattr(placeholder, 'text'):
-            placeholder.text = ''
-        
-        # Add image to the placeholder
-        placeholder.insert_picture(image_path)
-    
-    def _apply_text_formatting(self, text_frame, font=None, size=None, color=None, alignment=None):
-        """
-        Apply formatting to text.
-        
-        Args:
-            text_frame: The text frame to format.
-            font (str, optional): Font name.
-            size (int, optional): Font size in points.
-            color (RGBColor, optional): Font color.
-            alignment (PP_ALIGN, optional): Text alignment.
-        """
-        if not hasattr(text_frame, 'paragraphs'):
-            return
-            
-        for paragraph in text_frame.paragraphs:
-            if alignment is not None:
-                paragraph.alignment = alignment
-            
-            for run in paragraph.runs:
-                if font is not None:
-                    run.font.name = font
-                
-                if size is not None:
-                    run.font.size = Pt(size)
-                
-                if color is not None:
-                    run.font.color.rgb = color
-
-def main():
-    """
-    Example usage of the PPTGenerator class.
-    """
-    # Create a PPT generator
-    generator = PPTGenerator()
-    
-    # Generate a presentation from a YAML file
-    success = generator.generate_from_file('examples/simple_presentation.yaml', 'output.pptx')
-    
-    if success:
-        print("Presentation generated successfully!")
-    else:
-        print("Failed to generate presentation.")
-
-if __name__ == "__main__":
-    main()
+        # Default to black if parsing fails
+        logger.warning(f"Could not parse color value: {color_value}, using black")
+        return (0, 0, 0)

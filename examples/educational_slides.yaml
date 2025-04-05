@@ -1,0 +1,321 @@
+# Educational Course Slides Template
+
+variables:
+  course_title: "Introduction to Data Science"
+  lesson_number: "3"
+  topic: "Exploratory Data Analysis"
+  instructor: "Dr. Jane Smith"
+  date: "April 5, 2025"
+  primary_color: [63, 81, 181] # Indigo
+  secondary_color: [255, 87, 34] # Deep Orange
+  highlight_color: [255, 193, 7] # Amber
+  dark_bg: [48, 48, 48] # Dark gray
+
+settings:
+  theme:
+    fonts:
+      title:
+        name: "Open Sans"
+        size: 40
+      subtitle:
+        name: "Open Sans"
+        size: 28
+      body:
+        name: "Roboto"
+        size: 20
+    colors:
+      background: "#FFFFFF" # White
+      title: [63, 81, 181] # Indigo
+      text: [66, 66, 66] # Dark gray
+      accent: [255, 87, 34] # Deep Orange
+
+  properties:
+    title: "{{course_title}} - Lesson {{lesson_number}}: {{topic}}"
+    author: "{{instructor}}"
+    subject: "Educational"
+    keywords: "education, course, data science, eda"
+    category: "Education"
+
+slides:
+  # Title slide
+  - type: title
+    title: "{{course_title}}"
+    subtitle: "Lesson {{lesson_number}}: {{topic}}\n{{instructor}} | {{date}}"
+    background:
+      color: "{{dark_bg}}"
+    elements:
+      - type: shape
+        shape_type: rectangle
+        left: 3.5
+        top: 3.2
+        width: 5
+        height: 0.1
+        fill_color: "{{secondary_color}}"
+
+  # Learning objectives
+  - type: title_and_content
+    title: "Learning Objectives"
+    content:
+      - "1. Understand the purpose and importance of exploratory data analysis"
+      - "2. Learn key techniques for summarizing and visualizing data"
+      - "3. Apply statistical methods to identify patterns and relationships"
+      - "4. Detect outliers and handle missing data appropriately"
+      - "5. Create effective visualizations to communicate insights"
+
+  # Agenda slide
+  - type: title_and_content
+    title: "Today's Agenda"
+    content:
+      - "• Introduction to EDA (10 min)"
+      - "• Data Summarization Techniques (15 min)"
+      - "• Visualization Methods (20 min)"
+      - "• Hands-on Exercise (30 min)"
+      - "• Discussion and Q&A (15 min)"
+
+  # Introduction section
+  - type: section
+    title: "Introduction to EDA"
+    background:
+      color: "{{dark_bg}}"
+
+  - type: title_and_content
+    title: "What is Exploratory Data Analysis?"
+    content: |
+      **Definition**: Exploratory Data Analysis (EDA) is an approach to analyzing datasets to summarize their main characteristics, often using visual methods.
+
+      **Key aspects of EDA**:
+      • Initial investigation of data before formal modeling
+      • Maximize insight into a dataset
+      • Uncover underlying structure
+      • Detect outliers and anomalies
+      • Test underlying assumptions
+      • Develop parsimonious models
+
+      _"Exploratory data analysis is detective work – numerical detective work – or counting detective work – or graphical detective work."_ – John Tukey
+
+  - type: title_and_content
+    title: "The EDA Process"
+    content:
+      - "1. **Ask questions** about your data"
+      - "2. **Search for answers** by visualizing, transforming, and modeling your data"
+      - "3. **Use what you learn** to refine your questions and/or generate new questions"
+      - "4. **Iterate** until you have a comprehensive understanding of your dataset"
+
+  # Data Summarization section
+  - type: section
+    title: "Data Summarization Techniques"
+    background:
+      color: "{{dark_bg}}"
+
+  - type: title_and_content
+    title: "Descriptive Statistics"
+    content:
+      type: table
+      has_header: true
+      data:
+        - ["Statistic", "Description", "Python Implementation"]
+        - ["Mean", "Average value", "np.mean(data) or data.mean()"]
+        - ["Median", "Middle value", "np.median(data) or data.median()"]
+        - [
+            "Mode",
+            "Most frequent value",
+            "from scipy import stats; stats.mode(data)",
+          ]
+        - [
+            "Range",
+            "Difference between max and min",
+            "np.max(data) - np.min(data)",
+          ]
+        - [
+            "Standard Deviation",
+            "Measure of dispersion",
+            "np.std(data) or data.std()",
+          ]
+        - ["Variance", "Square of std. deviation", "np.var(data) or data.var()"]
+        - [
+            "Quantiles",
+            "Values at specific percentiles",
+            "np.percentile(data, [25, 50, 75])",
+          ]
+      style:
+        zebra_striping: true
+
+  - type: title_and_content
+    title: "Data Distribution Analysis"
+    content:
+      - "Methods to understand data distribution:"
+      - "• **Histograms**: Visualize frequency distribution"
+      - "• **Box plots**: Show five-number summary"
+      - "• **Violin plots**: Combine box plot with kernel density plot"
+      - "• **Q-Q plots**: Check if data follows a theoretical distribution"
+      - "• **Kernel Density Estimation (KDE)**: Smooth version of histogram"
+
+  - type: title_and_content
+    title: "Correlation Analysis"
+    content: |
+      **Types of correlation:**
+
+      • **Pearson correlation**: Measures linear relationship (-1 to 1)
+      • **Spearman correlation**: Measures monotonic relationship
+      • **Kendall's tau**: Non-parametric measure of ordinal association
+
+      **Interpretation:**
+
+      • **Strong positive**: Values close to 1
+      • **Strong negative**: Values close to -1
+      • **No correlation**: Values around 0
+
+      _Remember: Correlation does not imply causation!_
+
+  # Visualization Methods section
+  - type: section
+    title: "Visualization Methods"
+    background:
+      color: "{{dark_bg}}"
+
+  - type: title_and_content
+    title: "Important Visualization Types"
+    content:
+      - "**Univariate Analysis**:"
+      - "• Histograms, Density Plots"
+      - "• Box Plots, Violin Plots"
+      - "• Bar Charts"
+      - ""
+      - "**Bivariate Analysis**:"
+      - "• Scatter Plots"
+      - "• Line Charts"
+      - "• Heatmaps"
+      - ""
+      - "**Multivariate Analysis**:"
+      - "• Pair Plots"
+      - "• Parallel Coordinates"
+      - "• Bubble Charts"
+
+  - type: title_and_content
+    title: "Example: Scatter Plot with Regression Line"
+    content:
+      type: code
+      code: |
+        import matplotlib.pyplot as plt
+        import seaborn as sns
+        import numpy as np
+
+        # Generate some sample data
+        np.random.seed(42)
+        x = np.random.normal(0, 1, 100)
+        y = 2 * x + np.random.normal(0, 1, 100)
+
+        # Create scatter plot with regression line
+        plt.figure(figsize=(10, 6))
+        sns.regplot(x=x, y=y, ci=95)
+        plt.title('Example Scatter Plot with Regression Line')
+        plt.xlabel('X variable')
+        plt.ylabel('Y variable')
+        plt.grid(True, alpha=0.3)
+        plt.show()
+      font: "Consolas"
+      size: 16
+      color: [0, 230, 0]
+      background: true
+      background_color: "#202020"
+
+  # Hands-on exercise
+  - type: section
+    title: "Hands-on Exercise"
+    background:
+      color: "{{dark_bg}}"
+
+  - type: title_and_content
+    title: "Exercise: Boston Housing Dataset Analysis"
+    content: |
+      **Dataset**: Boston Housing dataset containing information about housing in Boston suburbs
+
+      **Tasks**:
+
+      1. Load the dataset using sklearn
+      ```python
+      from sklearn.datasets import load_boston
+      boston = load_boston()
+      import pandas as pd
+      df = pd.DataFrame(boston.data, columns=boston.feature_names)
+      df['PRICE'] = boston.target
+      ```
+
+      2. Generate descriptive statistics for all variables
+      3. Create histograms for key features
+      4. Calculate correlation matrix and visualize with a heatmap
+      5. Create scatter plots between price and key features
+      6. Identify potential outliers using box plots
+
+  - type: two_content
+    title: "Expected Output Examples"
+    left_content:
+      type: text_box
+      text: |
+        **Correlation Heatmap Analysis**:
+
+        • Strong positive correlation between RM (avg rooms) and PRICE
+        • Strong negative correlation between LSTAT (% lower status) and PRICE
+        • Moderate negative correlation between INDUS (industry) and PRICE
+        • Weak correlation between AGE and PRICE
+      font: "Roboto"
+      size: 16
+    right_content:
+      type: text_box
+      text: |
+        **Outlier Analysis**:
+
+        • Several outliers in the CRIM feature (crime rate)
+        • A few high-value outliers in the RM feature
+        • Potential influential points where both RM and PRICE are high
+        • Consider treating or removing extreme outliers before modeling
+      font: "Roboto"
+      size: 16
+
+  # Discussion and Q&A
+  - type: section
+    title: "Discussion and Q&A"
+    background:
+      color: "{{dark_bg}}"
+
+  - type: title_and_content
+    title: "Best Practices for EDA"
+    content:
+      - "1. **Start with questions**, not visualizations"
+      - "2. **Look at the raw data** first to understand the structure"
+      - "3. **Combine statistical summaries** with appropriate visualizations"
+      - "4. **Investigate outliers** – they often contain valuable information"
+      - "5. **Consider transformations** for skewed distributions"
+      - "6. **Document your process** and findings"
+      - "7. **Iterate and refine** your analysis"
+
+  - type: title_and_content
+    title: "Common Pitfalls in EDA"
+    content:
+      - "• Overlooking data quality issues"
+      - "• Ignoring missing data patterns"
+      - "• Creating misleading visualizations"
+      - "• Confirmation bias – searching for patterns that confirm preconceptions"
+      - "• Not considering domain context"
+      - "• Drawing conclusions beyond what the data supports"
+
+  # Review and next steps
+  - type: title_and_content
+    title: "Review and Next Steps"
+    content:
+      - "**What we've learned:**"
+      - "• Purpose and importance of EDA"
+      - "• Key techniques for summarizing data"
+      - "• Methods for effective data visualization"
+      - "• How to identify patterns and outliers"
+      - ""
+      - "**Next lesson:**"
+      - "• Data Preprocessing and Feature Engineering"
+      - "• We'll build on our EDA skills to prepare data for modeling"
+
+  # Final slide
+  - type: title
+    title: "Thank You!"
+    subtitle: "Questions?\n{{instructor}} | {{instructor}}@university.edu"
+    background:
+      color: "{{dark_bg}}"
