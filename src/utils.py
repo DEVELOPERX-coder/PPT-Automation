@@ -112,8 +112,6 @@ def get_rgb_color(color_value):
     Returns:
         tuple: RGB color as (r, g, b) tuple.
     """
-    print(f"Input type: {type(color_value)}, value: {color_value}")
-
     if isinstance(color_value, (list, tuple)) and len(color_value) == 3:
         return tuple(int(c) for c in color_value)
     
@@ -146,9 +144,11 @@ def get_rgb_color(color_value):
             'teal': (0, 128, 128)
         }
         
-        color_lower = color_value.lower().replace(' ', '_')
-        if color_lower in named_colors:
-            return named_colors[color_lower]
+        # color_lower = color_value.lower().replace(' ', '_')
+        color_lower = color_value.lower().replace('[','').replace(']','').replace(',','').split()
+        return (int(color_lower[0]), int(color_lower[1]), int(color_lower[2]))
+        # if color_lower in named_colors:
+        #     return named_colors[color_lower]
     
     # Default to black if parsing fails
     logger.warning(f"Could not parse color value: {color_value}, using black")
